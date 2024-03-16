@@ -1,0 +1,25 @@
+﻿
+
+.row {
+    display: inline-block;
+    align-items: center;
+    margin: 10px;
+}
+
+.label {
+    width: 100px;
+    color: red;
+    font-size: 1rem;
+    font-weight: bold;
+    display: inline;
+    justify-content: center;
+    align-items: center;
+}
+
+.value {
+    flex: 1;
+    text-align: center;
+    color: gray;
+    font-size: 1rem;
+    font-weight: bold;
+}

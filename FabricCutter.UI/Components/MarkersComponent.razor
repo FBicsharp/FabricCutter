@@ -1,0 +1,43 @@
+﻿
+
+<div class="marker-start" style=@start>
+</div>
+<div class="marker" style=@idx>
+	ciccio
+</div>
+<div class="marker-end" style=@end>
+</div>
+
+
+@code {
+	[Parameter]
+	public string idx{ get; set; } 
+	[Parameter]
+	public string start { get; set; }
+	[Parameter]
+	public string end { get; set; }
+
+}
+
+<style>
+	.marker {
+		position: absolute;
+	}
+
+	.marker-start {
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		background-color: green;
+		transform: translateY(-21px);
+
+	}
+
+	.marker-end {
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		background-color: red;
+		transform: translateY(25vh);
+	}
+</style> 

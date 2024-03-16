@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+    stringgymapp:
+        build: ./Gym/
+        container_name: string-cleaner-app-container
+        ports:
+            - "33000:80"            
+        depends_on:
+            - stringcleanerapi            
+
+    stringcleanerapi:
+        build: ./CleaningBracketsAPI/
+        container_name: string-cleaner-api-container
+        ports:
+            - "33500:80"
+        
+    
+# docker compose up --no-cache -d 
+    
