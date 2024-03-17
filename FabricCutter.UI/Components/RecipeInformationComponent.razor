@@ -1,4 +1,6 @@
 ﻿@using FabricCutter.UI.Logic
+@using FabricCutter.UI.Logic.Events
+@inject IEventHub _eventHub
 <div class="length-component-separator"></div>
 <div class="length-component-up">
 	<div class="row">
@@ -26,7 +28,31 @@
 
 @code {
 	[Parameter]
-	public IRecipeInformation RecipeInformation { get; set; } 
+	public IRecipeInformation RecipeInformation { get; set; }
+
+
+
+	protected override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			_eventHub.Subscribe(ApplicationEvents.OnMarkerAdded, OnPointerPositionChanged);
+		}
+		return base.OnAfterRenderAsync(firstRender);
+	}
+
+
+	private void OnPointerPositionChanged(ApplicationEvents applicationEvents, object value)
+	{
+		var message = EventArgsAdapter.GetEventArgs<MarkerAddedEventArgs>(applicationEvents, value);
+		if (value is not null)
+		{
+			this.RecipeInformation.EvalutateMarkers(message.markersList);
+			Console.WriteLine("RecipeInformationComponent: OnPointerPositionChanged");
+			StateHasChanged();
+		}
+	}
+
 
 
 }

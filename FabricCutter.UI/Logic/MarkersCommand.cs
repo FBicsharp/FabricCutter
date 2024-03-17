@@ -1,5 +1,6 @@
 ﻿using Blazored.Toast.Services;
 using FabricCutter.UI.Components;
+using FabricCutter.UI.Service;
 using System.Collections.Generic;
 
 namespace FabricCutter.UI.Logic
@@ -18,57 +19,70 @@ namespace FabricCutter.UI.Logic
 		public Marker? CurrentMarker { get; private set; }
 
 
-		readonly ISlider _slider;
+		readonly IMarkerService _markerService;
 		readonly IMarkerFactory _markerFactory;
 		private readonly IToastService toastService;
 
-		public MarkersCommand(ISlider slider, IMarkerFactory markerFactory, IToastService toastService)
+		public MarkersCommand(IMarkerService markerService, IMarkerFactory markerFactory, IToastService toastService)
 		{
 
-			_slider = slider;
+			_markerService = markerService;
 			_markerFactory = markerFactory;
 			this.toastService = toastService;
-			
+			IsStartMarkerEnable = true;
+			IsEndMarkerEnable = true;
+			IsStartSubMarkerEnable = true;
+			IsEndSubMarkerEnable = true;
+
 		}
 
 		public void StartMarker()
 		{
-			var newId = _slider.Markers.Any() ? _slider.Markers.Max(m => m.Id) : 1;
-			_markerFactory.WithStartMarkerPosition(newId, _slider.PointerPosition);
+			//_slider.AddMarker(new Logic.Marker(1, 700, 500)
+			//{
+			//	SubMarker = new Logic.SubMarker(1, 650, 550)
+			//});
+			//_slider.AddMarker(new Logic.Marker(2, 750, 550)
+			//{
+			//	SubMarker = new Logic.SubMarker(2, 700, 600)
+			//});
+
+			var newId = _markerService.Markers.Count>0 ? _markerService.Markers.Max(m => m.Id) : 1;
+			_markerFactory.WithStartMarkerPosition(newId, _markerService.PointerPosition);
 		}
 
 		public void EndMarker()
 		{
-			_markerFactory.WithStopMarkerPosition(_slider.PointerPosition);
+			_markerFactory.WithStopMarkerPosition(_markerService.PointerPosition);
 
 		}
 
 		public void EndSubMarker()
 		{
-			_markerFactory.WithStopSubMarkerPosition(_slider.PointerPosition);
+			_markerFactory.WithStopSubMarkerPosition(_markerService.PointerPosition);
 		}
 
 		public void StartSubMarker()
 		{
-			_markerFactory.WithStartSubMarkerPosition(_slider.PointerPosition);
+			_markerFactory.WithStartSubMarkerPosition(_markerService.PointerPosition);
 		}
 
 		public void FindMarkerSubMarker()
 		{
-			_markerFactory.WithStartSubMarkerPosition(_slider.PointerPosition);
+			_markerFactory.WithStartSubMarkerPosition(_markerService.PointerPosition);
 		}
 
 
 		/// <summary>
 		/// trova se nella posizione corrente è presente un marker,
 		/// </summary>
-		public void FindMarkerAndEvalutePossibleAction()
+		public void FindMarkerAndEvalutePossibleAction(object sender, ISlider slider)
 		{
-			CurrentMarker = _slider.Markers
+			CurrentMarker = _markerService.Markers
 				.OrderBy(m => m.Id)
 				.FirstOrDefault(m =>
-				   m.StartPosition < _slider.PointerPosition
-				&& m.EndPosition > _slider.PointerPosition
+				   m.StartPosition < _markerService.PointerPosition
+				&& m.EndPosition > _markerService.PointerPosition
 				);
 
 			if (CurrentMarker is null)
@@ -81,11 +95,11 @@ namespace FabricCutter.UI.Logic
 			}
 
 			//da questo id devo capire se ci sono altri marker tra lo start e lo stopo per capires e posso creare un nuovo marker al suo interno
-			var exististSecondMarker = _slider.Markers
+			var exististSecondMarker = _markerService.Markers
 				.OrderBy(m => m.Id)
 				.FirstOrDefault(m => m.Id > (CurrentMarker as Marker)?.Id
-				&& m.StartPosition < _slider.PointerPosition
-				&& m.EndPosition > _slider.PointerPosition);
+				&& m.StartPosition < _markerService.PointerPosition
+				&& m.EndPosition > _markerService.PointerPosition);
 
 			if (CurrentMarker.StartPosition>0 && CurrentMarker.EndPosition <= 0)
 			{// posso chiudere il marker o reimpostare il nuovo punto di inizio

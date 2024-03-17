@@ -4,11 +4,13 @@
 
 <div class="main">
 
-	<CurrentPositionComponent currentPosition=@ViewModel.Recipe.Slider.PointerPosition></CurrentPositionComponent>
+	<CurrentPositionComponent ></CurrentPositionComponent>
 	<RecipeInformationComponent RecipeInformation=@ViewModel.Recipe.RecipeInformation></RecipeInformationComponent>
-	<SliderComponent @bind-Slider=@ViewModel.Recipe.Slider></SliderComponent>
-	
-	<MarkersCommandComponent MarkersCommand=@ViewModel.Recipe.MarkersCommand OnAddNewMarkerComplete=@ViewModel.OnAddNewMarkerComplete></MarkersCommandComponent>
+	<SliderComponent @bind-Slider=@ViewModel.Recipe.Slider></SliderComponent>	
+	<MarkersCommandComponent 
+		MarkersCommand=@ViewModel.Recipe.MarkersCommand 
+		OnAddNewMarkerComplete=@ViewModel.OnAddNewMarkerComplete>
+	</MarkersCommandComponent>
 	<ReciperCommandComponent></ReciperCommandComponent>
 </div>
 
@@ -16,13 +18,7 @@
     protected override void OnInitialized()
     {
         ViewModel.StateHasChenged = StateHasChanged;
-        ViewModel.Recipe.Slider.AddMarker(new Logic.Marker(1, 700,500){
-			SubMarker = new Logic.SubMarker(1, 650, 550)
-		});
-		ViewModel.Recipe.Slider.AddMarker(new Logic.Marker(2, 750,550)
-{
-			SubMarker = new Logic.SubMarker(2, 700, 600)
-		});
+       
 		
     }
 }

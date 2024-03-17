@@ -1,6 +1,7 @@
 using Blazored.Toast;
 using FabricCutter.UI;
 using FabricCutter.UI.Logic;
+using FabricCutter.UI.Logic.Events;
 using FabricCutter.UI.Service;
 using FabricCutter.UI.ViewModel;
 using Microsoft.AspNetCore.Components.Web;
@@ -21,7 +22,7 @@ builder.Services.AddScoped(sp => new HttpClient
 	BaseAddress = new Uri(configurationService.UrlBaseSettings.BaseAddress),
 	Timeout= TimeSpan.FromSeconds(configurationService.UrlBaseSettings.SecondTimeout)  
 });
-builder.Services.AddScoped<IBracketsStringService, BracketsStringService>();
+builder.Services.AddScoped<IMarkerService, MarkerService>();
 builder.Services.AddScoped<IRecipeViewModel, RecipeViewModel>();
 
 builder.Services.AddScoped<ISlider, Slider>();
@@ -31,6 +32,13 @@ builder.Services.AddScoped<IMarkerFactory, MarkerFactory> ();
 builder.Services.AddScoped<IMarkersCommand, MarkersCommand> ();
 builder.Services.AddScoped<IMarkersCommand, MarkersCommand> ();
 builder.Services.AddScoped<IMarkerFactoryValidator, MarkerFactoryValidator> ();
+
+builder.Services.AddSingleton<IEventHub,EventHub>();
+builder.Services.AddSingleton<IMarkerService, MarkerService>();
+
+
+
+
 
 
 

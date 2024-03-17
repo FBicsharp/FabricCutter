@@ -12,25 +12,20 @@ namespace FabricCutter.UI.Logic
 		public int MarkersNumber { get; private set; }
 		public int AbsolutePosition { get; private set; }
 
-		public List<Marker> Markers => _slider.Markers;
-		readonly ISlider _slider;
+		public List<Marker> Markers { get; private set; }
 
-		public RecipeInformation(ISlider slider)
+		
+
+		public void EvalutateMarkers(List<Marker> markers)
 		{
-
-			_slider = slider;
-			EvalutateMarkers();
-		}
-
-		private void EvalutateMarkers()
-		{
+			Markers = markers;
 			var cnt = Markers.Count();
-			var tmpLenght = cnt > 0 ? (Markers.Max(m => m.EndPosition) - Markers.Min(m => m.StartPosition)) : 0;
+			var tmpLenght = cnt > 0 ? (Markers.Max(m => m.StartPosition) - Markers.Min(m => m.EndPosition)) : 0;
 			TotalLenght = tmpLenght < 0 ? 0 : tmpLenght;
 			MarkersLenght = cnt > 0 ? Markers.Sum(m => m.MarkerLenght) : 0;
 			SplicesNumber = cnt;
 			MarkersNumber = cnt;
-			AbsolutePosition = _slider.PointerPosition;//non se parte da sx o dx
+			AbsolutePosition = 0;//non se parte da sx o dx
 		}
 
 

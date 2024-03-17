@@ -9,5 +9,6 @@ namespace FabricCutter.UI.Logic
 		int MarkersNumber { get; }
 		int SplicesNumber { get; }
 		int TotalLenght { get; }
+		void EvalutateMarkers(List<Marker> markers);
 	}
 }

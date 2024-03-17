@@ -17,10 +17,11 @@ namespace FabricCutter.UI.Logic
 
 		public Recipe(IRecipeInformation recipeInformation, ISlider slider, IRecipeDetailJsonFactory recipeDetailJsonFactory, IMarkersCommand markersCommand)
 		{
+			Slider = slider;			
 			RecipeInformation = recipeInformation;
-			Slider = slider;
 			RecipeDetailJsonFactory = recipeDetailJsonFactory;
 			MarkersCommand = markersCommand;
+			
 		}
 
 		

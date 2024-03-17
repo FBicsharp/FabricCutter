@@ -9,5 +9,8 @@ namespace FabricCutter.UI.Logic
 
 		public void AddMarker(Marker newMarker);
 		public void Reset();
+
+		
+
 	}
 }

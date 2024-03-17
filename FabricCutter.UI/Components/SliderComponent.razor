@@ -1,16 +1,21 @@
 ﻿@using FabricCutter.UI.Logic
-
+@using FabricCutter.UI.Logic.Events
+@using FabricCutter.UI.Service
+@inject IEventHub _eventHub
+@inject IMarkerService _markerService
 <div class="slider-container">
 
 	<div class="slider-content">
-	<div class="slider-header"></div>
-		@foreach (var marker in Slider.Markers)
+		<div class="slider-header"></div>
+		@if (Markers is not null)
 		{
-			<MarkersComponent Marker=@marker  ></MarkersComponent>
+			@foreach (var marker in Markers)
+			{
+				<MarkersComponent Marker=@marker></MarkersComponent>
+			}
 		}
 	</div>
 	<input type="range" class="slider-range" min="0" max=@Slider.SliderLenght value=@Slider.PointerPosition @onchange=@OnChange />
-
 </div>
 
 
@@ -19,20 +24,47 @@
 @code {
 	[Parameter]
 	public ISlider Slider { get; set; }
-	
+
+	List<Marker> Markers { get; set; }
+
 	[Parameter]
 	public EventCallback<ISlider> SliderChanged { get; set; }
 
 	protected void OnChange(ChangeEventArgs e)
 	{
 		Slider.PointerPosition = Convert.ToInt32(e.Value);
+		SendPointerPositionChangeMesage();
 		SliderChanged.InvokeAsync(Slider);
 	}
 
-
-	protected override void OnInitialized()
+	protected override Task OnAfterRenderAsync(bool firstRender)
 	{
-		
+		if (firstRender)
+		{
+			_eventHub.Subscribe(ApplicationEvents.OnMarkerAdded, OnMarkerAdded);
+			//invio il messaggio all'inizializzazione
+			SendPointerPositionChangeMesage();
+
+		}
+		return base.OnAfterRenderAsync(firstRender);
+	}
+
+
+
+	private void SendPointerPositionChangeMesage()
+	{
+		var args = new PointerPositionChangedEventArgs(Slider.PointerPosition);
+		_eventHub.Publish(ApplicationEvents.OnPointerPositionChanged, args);
+	}
+
+	private void OnMarkerAdded(ApplicationEvents applicationEvents, object value)
+	{
+		var message = EventArgsAdapter.GetEventArgs<MarkerAddedEventArgs>(applicationEvents, value);
+		if (message is not null)
+		{
+			Markers = message.markersList;
+			StateHasChanged();
+		}
 	}
 
 }
