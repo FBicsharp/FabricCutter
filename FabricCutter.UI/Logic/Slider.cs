@@ -28,8 +28,6 @@ namespace FabricCutter.UI.Logic
 		public void AddMarker(Marker newMarker)
 		{
 			Markers.Add(newMarker);
-			
-
 		}
 		public void Reset() => Markers.Clear();
 

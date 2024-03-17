@@ -26,9 +26,8 @@
 </div>
 <div class="length-component-separator-down"></div>
 
-@code {
-	[Parameter]
-	public IRecipeInformation RecipeInformation { get; set; }
+@code {	
+	public IRecipeInformation RecipeInformation { get; set; } = new RecipeInformation();
 
 
 

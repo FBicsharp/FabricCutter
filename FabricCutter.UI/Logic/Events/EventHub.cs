@@ -61,8 +61,11 @@ namespace FabricCutter.UI.Logic.Events
 			{
 				case ApplicationEvents.OnPointerPositionChanged:
 					return args is PointerPositionChangedEventArgs pointerArgs ? (T)(object)pointerArgs : default;
+				case ApplicationEvents.OnAddMarker:
+					return args is MarkerAddEventArgs markerArgs ? (T)(object)markerArgs : default;
 				case ApplicationEvents.OnMarkerAdded:
-					return args is MarkerAddedEventArgs markerArgs ? (T)(object)markerArgs : default;
+					return args is MarkerAddedEventArgs markerAddedArgs ? (T)(object)markerAddedArgs : default;
+
 				case ApplicationEvents.OnResetMarker:
 					return args is MarkerResetedEventArgs resetArgs ? (T)(object)resetArgs : default;
 

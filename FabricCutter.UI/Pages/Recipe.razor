@@ -5,12 +5,9 @@
 <div class="main">
 
 	<CurrentPositionComponent ></CurrentPositionComponent>
-	<RecipeInformationComponent RecipeInformation=@ViewModel.Recipe.RecipeInformation></RecipeInformationComponent>
+	<RecipeInformationComponent ></RecipeInformationComponent>
 	<SliderComponent @bind-Slider=@ViewModel.Recipe.Slider></SliderComponent>	
-	<MarkersCommandComponent 
-		MarkersCommand=@ViewModel.Recipe.MarkersCommand 
-		OnAddNewMarkerComplete=@ViewModel.OnAddNewMarkerComplete>
-	</MarkersCommandComponent>
+	<MarkersCommandComponent></MarkersCommandComponent>
 	<ReciperCommandComponent></ReciperCommandComponent>
 </div>
 
