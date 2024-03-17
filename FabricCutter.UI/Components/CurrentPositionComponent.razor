@@ -1,6 +1,6 @@
 ﻿
 <div class="row">
-	<div class="label">Current Position:</div>
+	<div class="label">CURRENT POSITION:</div>
 	<div class="value">@currentPosition</div>
 </div>
  
@@ -8,5 +8,11 @@
 @code {
 	[Parameter]
 	public int currentPosition { get; set; }
+
+
+    [Parameter]
+	public EventCallback<int> currentPositionChanged { get; set; }
+
+    
 
 }

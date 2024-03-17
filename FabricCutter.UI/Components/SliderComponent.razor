@@ -1,21 +1,38 @@
-﻿
+﻿@using FabricCutter.UI.Logic
+
 <div class="slider-container">
 
 	<div class="slider-content">
 	<div class="slider-header"></div>
-		<MarkersComponent end="z-index:106; right:500px; " start="z-index:106; right:700px; t " idx="z-index:106; right:600px;"></MarkersComponent>
-		<MarkersComponent end="z-index:101; right:550px; " start="z-index:101; right:750px; " idx="z-index:101; right:650px;"></MarkersComponent>
-		
-		<SubMarkersComponent></SubMarkersComponent>
-
+		@foreach (var marker in Slider.Markers)
+		{
+			<MarkersComponent Marker=@marker  ></MarkersComponent>
+		}
 	</div>
+	<input type="range" class="slider-range" min="0" max=@Slider.SliderLenght value=@Slider.PointerPosition @onchange=@OnChange />
 
-	
 </div>
 
 
 
 
 @code {
+	[Parameter]
+	public ISlider Slider { get; set; }
+	
+	[Parameter]
+	public EventCallback<ISlider> SliderChanged { get; set; }
+
+	protected void OnChange(ChangeEventArgs e)
+	{
+		Slider.PointerPosition = Convert.ToInt32(e.Value);
+		SliderChanged.InvokeAsync(Slider);
+	}
+
+
+	protected override void OnInitialized()
+	{
+		
+	}
 
 }

@@ -1,5 +1,25 @@
-﻿<h3>SubMarkersComponent</h3>
+﻿@using FabricCutter.UI.Logic
+
+<div class="submarker-content" style=@contentStyle>
+</div>
+<div class="submarker-descriptor" style=@descriptorStyle>
+	@String.Format("S{0}", SubMarker?.Id)
+</div>
 
 @code {
 
+	[Parameter]
+	public SubMarker SubMarker { get; set; }
+
+	public string contentStyle { get; set; }
+	public string descriptorStyle { get; set; }
+
+	protected override Task OnParametersSetAsync()
+	{
+		contentStyle = $"z-index:{102 + SubMarker?.Id}; right:{SubMarker?.EndPosition}px; width:{SubMarker?.MarkerLenght}px; ";
+		descriptorStyle = $"z-index:{100 + SubMarker?.Id}; right:{SubMarker?.StartPosition}px; ";
+		return base.OnParametersSetAsync();
+	}
+
 }
+

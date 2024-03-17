@@ -1,17 +1,50 @@
 ﻿
 
-<div class="length-component">
-	<div class="row">
-		<button></button>
-		<div class="label">CONFIRM</div>
+<div class="recipe-command-length-component">
+	<div class="recipe-command-row">
+		<button type="button" class="recipe-command-marker-button"></button>
+		<div class="recipe-command-label">CONFIRM</div>
 	</div>
-	<div class="row">
-		<button></button>
-		<div class="label">RESET</div>
+	<div class="recipe-command-row">
+		<button type="button" class="recipe-command-marker-button"></button>
+		<div class="recipe-command-label">RESET</div>
 	</div>
 </div>
 
+<style>
+	.recipe-command-length-component {
+		padding: 10px;
+		margin-bottom: 20px;
+		display: inline-flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+		width: 100%;
+	}
 
+	.recipe-command-row {
+		display: inline-block;
+		align-items: center;
+		margin: 10px;
+	}
+
+	.recipe-command-label {
+		width: 100px;
+		color: black;
+		font-size: 1rem;
+		font-weight: bold;
+		display: inline;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.recipe-command-marker-button {
+		display: flex;
+		flex-direction: column;
+		height: 5rem;
+		width: 5rem;
+	}
+
+</style>
 @code {
 
 }

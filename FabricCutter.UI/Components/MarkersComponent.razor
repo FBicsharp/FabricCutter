@@ -1,43 +1,46 @@
-﻿
+﻿@using FabricCutter.UI.Logic
 
-<div class="marker-start" style=@start>
+
+<div class="marker-delimitator marker-start" style=@startDelimitatorStyle>
 </div>
-<div class="marker" style=@idx>
-	ciccio
+<div class="marker-content" style=@contentStyle>
 </div>
-<div class="marker-end" style=@end>
+<div class="marker-delimitator marker-end" style=@endDelimitatorStyle>
 </div>
+<div class="marker-descriptor" style=@descriptorStyle>
+	@String.Format("M{0}", Marker.Id)
+</div>
+
+ @if (Marker.SubMarker is not null)
+{
+	<SubMarkersComponent SubMarker=@Marker.SubMarker ></SubMarkersComponent>	
+}
+
 
 
 @code {
+
 	[Parameter]
-	public string idx{ get; set; } 
-	[Parameter]
-	public string start { get; set; }
-	[Parameter]
-	public string end { get; set; }
+	public Marker Marker { get; set; }
+
+
+	public string contentStyle { get; set; }
+	public string startDelimitatorStyle { get; set; }
+	public string endDelimitatorStyle { get; set; }
+	public string descriptorStyle { get; set; }
+
+
+	protected override Task OnParametersSetAsync()
+	{
+		//start="z-index:106; right:700px; " end="z-index:106; right:500px; " idx="z-index:107; right:500px; width:200px;"
+		startDelimitatorStyle = $"z-index:{100 + Marker.Id}; right:{Marker.StartPosition}px; ";
+		contentStyle = $"z-index:{101 + Marker.Id}; right:{Marker.EndPosition}px; width:{Marker.MarkerLenght }px; ";
+		endDelimitatorStyle = $"z-index:{100 + Marker.Id}; right:{Marker.EndPosition}px; ";
+		descriptorStyle = $"z-index:{100 + Marker.Id}; right:{Marker.StartPosition}px; ";
+
+
+		return base.OnParametersSetAsync();
+	}
+
 
 }
-
-<style>
-	.marker {
-		position: absolute;
-	}
-
-	.marker-start {
-		position: absolute;
-		width: 20px;
-		height: 20px;
-		background-color: green;
-		transform: translateY(-21px);
-
-	}
-
-	.marker-end {
-		position: absolute;
-		width: 20px;
-		height: 20px;
-		background-color: red;
-		transform: translateY(25vh);
-	}
-</style> 

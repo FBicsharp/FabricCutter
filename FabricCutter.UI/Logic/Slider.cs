@@ -1,25 +1,26 @@
-﻿namespace FabricCutter.UI.Logic
+﻿using FabricCutter.UI.Service;
+
+namespace FabricCutter.UI.Logic
 {
-	public class Slider 
+	public class Slider : ISlider
 	{
-        public List<Marker> _markers { get; protected set; }		
+		public List<Marker> Markers { get; protected set; }
 		public int PointerPosition { get; set; }
 		public int SliderLenght { get; set; }
 
 
-		public Slider(int sliderLenght)
+		public Slider(ApplicationSettings applicationSettings)
 		{
-			_markers = new ();					
-			
-			SliderLenght = sliderLenght;
+			Markers = new();
+			SliderLenght = applicationSettings.SliderLenght;
 			PointerPosition = 0;
 		}
 
 		public void AddMarker(Marker newMarker)
 		{
-			_markers.Add(newMarker);			
+			Markers.Add(newMarker);
 		}
-		public void Reset() => _markers.Clear();
+		public void Reset() => Markers.Clear();
 
 
 

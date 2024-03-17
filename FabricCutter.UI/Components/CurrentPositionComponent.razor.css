@@ -2,14 +2,16 @@
 
 .row {
     display: inline-block;
+    flex-direction: column;
+    justify-content:center;
     align-items: center;
-    margin: 10px;
+    margin-top: 10px;
 }
 
 .label {
     width: 100px;
-    color: red;
-    font-size: 1rem;
+    color: #FAA300;
+    font-size: 1.2rem;
     font-weight: bold;
     display: inline;
     justify-content: center;
@@ -19,7 +21,7 @@
 .value {
     flex: 1;
     text-align: center;
-    color: gray;
-    font-size: 1rem;
+    color: #F4538A;
+    font-size: 1.5rem;
     font-weight: bold;
 }

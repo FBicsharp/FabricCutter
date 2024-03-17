@@ -1,0 +1,27 @@
+﻿.marker-content {
+    position: absolute;
+    background-color: rgba(32, 178, 170, 0.4);
+    border: 3px solid #0f30d6;
+    height: 26.3vh;
+}
+
+.marker-delimitator {
+    position: absolute;
+    width: 5px;
+    height: 30vh;
+    transform: translateY(-3vh);
+}
+
+.marker-start {
+    background-color: green;
+}
+
+.marker-end {
+    background-color: red;
+}
+
+.marker-descriptor {
+    position: absolute;
+    font-weight: bold;
+    transform: translate(1vw,26vh);
+}

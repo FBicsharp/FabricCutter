@@ -1,101 +1,29 @@
 ﻿@page "/"
 @layout FullPageLayout
+@inject IRecipeViewModel ViewModel;
 
 <div class="main">
 
-	<CurrentPositionComponent></CurrentPositionComponent>	
-	<RecipeInformationComponent></RecipeInformationComponent>	
-	<SliderComponent></SliderComponent>
+	<CurrentPositionComponent currentPosition=@ViewModel.Recipe.Slider.PointerPosition></CurrentPositionComponent>
+	<RecipeInformationComponent RecipeInformation=@ViewModel.Recipe.RecipeInformation></RecipeInformationComponent>
+	<SliderComponent @bind-Slider=@ViewModel.Recipe.Slider></SliderComponent>
 	
-	<MarkersCommandComponent></MarkersCommandComponent>
+	<MarkersCommandComponent MarkersCommand=@ViewModel.Recipe.MarkersCommand OnAddNewMarkerComplete=@ViewModel.OnAddNewMarkerComplete></MarkersCommandComponent>
 	<ReciperCommandComponent></ReciperCommandComponent>
 </div>
 
-
 @code {
-	private string currentPosition = "3060";
-	private string initialPosition = "";
-	private string finalPosition = "";
-	private bool isHighlighted = false;
-	private bool isACButtonDisabled = false;
-	private bool isSTOPButtonDisabled = true;
-	private bool isLDButtonDisabled = true;
-	private string view = "START";
-
-	private int marker1Left = 0;
-	private int marker2Left = 0;
-	private int highlightLeft = 0;
-	private int highlightWidth = 0;
-
-	private void ChangeView()
-	{
-		if (view == "START")
-		{
-			view = "END";
-		}
-		else
-		{
-			view = "START";
-		}
-	}
-
-	private void HandleACButtonClicked()
-	{
-		initialPosition = currentPosition;
-		isACButtonDisabled = true;
-		isSTOPButtonDisabled = false;
-		isLDButtonDisabled = false;
-	}
-
-	private void HandleSTOPButtonClicked()
-	{
-		if (!string.IsNullOrEmpty(initialPosition))
-		{
-			isHighlighted = true;
-			highlightLeft = marker1Left;
-			highlightWidth = marker2Left - marker1Left;
-		}
-	}
-
-	private void HandleLDButtonClicked()
-	{
-		finalPosition = currentPosition;
-	}
-
-	private void Reset()
-	{
-		currentPosition = "3060";
-		initialPosition = "";
-		finalPosition = "";
-		isHighlighted = false;
-		isACButtonDisabled = false;
-		isSTOPButtonDisabled = true;
-		isLDButtonDisabled = true;
-		marker1Left = 0;
-		marker2Left = 0;
-		highlightLeft = 0;
-		highlightWidth = 0;
-	}
-
-	protected override void OnInitialized()
-	{
-		base.OnInitialized();
-		marker1Left = GetLeftPosition(initialPosition);
-		marker2Left = GetLeftPosition(finalPosition);
-	}
-
-	private int GetLeftPosition(string position)
-	{
-		int left = 0;
-		if (!string.IsNullOrEmpty(position))
-		{
-			left = int.Parse(position.Substring(0, 2)) * 10;
-			left += int.Parse(position.Substring(2, 2));
-			left *= 10;
-		}
-		return left;
-	}
-
-	private string marker1Style => $"left: {marker1Left}px;";
-	private string marker2Style => $"left: {marker2Left}px;";
+    protected override void OnInitialized()
+    {
+        ViewModel.StateHasChenged = StateHasChanged;
+        ViewModel.Recipe.Slider.AddMarker(new Logic.Marker(1, 700,500){
+			SubMarker = new Logic.SubMarker(1, 650, 550)
+		});
+		ViewModel.Recipe.Slider.AddMarker(new Logic.Marker(2, 750,550)
+{
+			SubMarker = new Logic.SubMarker(2, 700, 600)
+		});
+		
+    }
 }
+ 

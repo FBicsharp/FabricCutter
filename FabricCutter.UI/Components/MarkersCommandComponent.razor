@@ -1,24 +1,65 @@
-﻿
+﻿@using FabricCutter.UI.Logic
+
 <div class="length-component">
 	<div class="row">
-		<button></button>
+		@if (MarkersCommand.IsStartMarkerEnable)
+		{
+			<button type="button" class="marker-button" @onclick=@MarkersCommand.StartMarker></button>
+		}
+		else
+		{
+			<button type="button" class="marker-button" disabled></button>
+		}
+		
 		<div class="label">AC</div>		
 	</div>
 	<div class="row">
-		<button></button>
+		@if (MarkersCommand.IsStartSubMarkerEnable)
+		{
+			<button type="button" class="marker-button" @onclick=@MarkersCommand.StartSubMarker></button>
+		}
+		else
+		{
+			<button type="button" class="marker-button" disabled></button>
+		}
+		
 		<div class="label">AS</div>
 	</div>
 	<div class="row">
-		<button></button>
+		@if (MarkersCommand.IsEndSubMarkerEnable)
+		{
+			<button type="button" class="marker-button" @onclick=@MarkersCommand.EndSubMarker></button>
+		}
+		else
+		{
+			<button type="button" class="marker-button" disabled></button>
+		}
 		<div class="label">LS</div>
 	</div>
 	<div class="row">
-		<button></button>
+		@if (MarkersCommand.IsEndMarkerEnable)
+		{
+			<button type="button" class="marker-button" @onclick=@MarkersCommand.EndMarker></button>
+		}
+		else
+		{
+			<button type="button" class="marker-button" disabled></button>
+		}
 		<div class="label">LD</div>
 	</div>
 </div>
 
 
 @code {
+
+	
+	[Parameter]
+	public IMarkersCommand MarkersCommand { get; set; }
+	
+
+	[Parameter]
+	public EventCallback<Marker> OnAddNewMarkerComplete { get; set; }
+
+	
 
 }
