@@ -3,9 +3,9 @@
 	public interface IMarkerFactory
 	{
 		MarkerBase Build();
-		bool WithStartMarkerPosition(int newMarkerId, int startPosition);
-		bool WithStartSubMarkerPosition(int startPosition);
-		bool WithStopMarkerPosition(int endPosition);
-		bool WithStopSubMarkerPosition(int endPosition);
+		Marker WithStartMarkerPosition(int newMarkerId, int startPosition);
+		Marker WithStartSubMarkerPosition(int startPosition);
+		Marker WithStopMarkerPosition(int endPosition);
+		Marker WithStopSubMarkerPosition(int endPosition);
 	}
 }

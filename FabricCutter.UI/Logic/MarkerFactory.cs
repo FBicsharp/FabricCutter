@@ -2,78 +2,56 @@
 {
 	public class MarkerFactory : IMarkerFactory
 	{
-		private readonly IMarkerFactoryValidator _markerFactoryValidator;
-
-		private Marker _currentMarker { get; set; }
-
-        public MarkerFactory(IMarkerFactoryValidator markerFactoryValidator)
-        {
-			this._markerFactoryValidator = markerFactoryValidator;
-		}
+		private Marker _currentMarker { get; set; }        
 
 
         public MarkerBase Build()
 		{
-			_markerFactoryValidator.Validate(_currentMarker);
-			if (!_markerFactoryValidator.IsValid)
-			{
-				return new MarkerInvalid();
-			}
+			//_markerFactoryValidator.Validate(_currentMarker);
+			//if (!_markerFactoryValidator.IsValid)
+			//{
+			//	return new MarkerInvalid();
+			//}
 
 			return _currentMarker;
 		}
 
-		public bool WithStartMarkerPosition(int newMarkerId, int startPosition)
+		public Marker WithStartMarkerPosition(int newMarkerId, int startPosition)
 		{
 			_currentMarker = new Marker(newMarkerId, startPosition, int.MinValue);
-			return true;
+			return _currentMarker;
 		}
-		public bool WithStopMarkerPosition(int endPosition)
+		public Marker WithStopMarkerPosition(int endPosition)
 		{
 			if (_currentMarker is null)
-				return false;
-			if (_currentMarker.EndPosition <= _currentMarker.StartPosition)
-				return false;
+				return _currentMarker;
+			if (_currentMarker.EndPosition >= _currentMarker.StartPosition)
+				return _currentMarker;
 			_currentMarker.EndPosition = endPosition;
-			return true;
+			return _currentMarker;
 		}
 
-		public bool WithStartSubMarkerPosition(int startPosition)
+		public Marker WithStartSubMarkerPosition(int startPosition)
 		{
 			if (_currentMarker is null || _currentMarker.SubMarker is null)
-				return false;
+				return _currentMarker;
 			_currentMarker.SubMarker = new SubMarker(_currentMarker.Id,startPosition, int.MinValue);
-			return true;
+			return _currentMarker;
 		}
-		public bool WithStopSubMarkerPosition(int endPosition)
+		public Marker WithStopSubMarkerPosition(int endPosition)
 		{
 			if (_currentMarker is null || _currentMarker.SubMarker is null)
-				return false;
+				return _currentMarker;
 
 			if (_currentMarker.SubMarker.EndPosition <= _currentMarker.SubMarker.StartPosition)
-				return false;
+				return _currentMarker;
 			_currentMarker.EndPosition = endPosition;
-			return true;
+			return _currentMarker;
 		}
 
 
 
 	}
 
-	public class MarkerFactoryValidator : IMarkerFactoryValidator
-	{
-
-		public bool IsValid { get; set; }
-		public bool IsStartMarkerEnable { get; set; }
-		public bool IsEndMarkerEnable { get; set; }
-		public bool IsStartSubMarkerEnable { get; set; }
-		public bool IsEndSubMarkerEnable { get; set; }
-
-		public MarkerFactoryValidator Validate(Marker marker)
-		{
-
-			return this;
-		}
-
-	}
+	
 }
