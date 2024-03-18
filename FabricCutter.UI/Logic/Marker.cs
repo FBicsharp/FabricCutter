@@ -1,6 +1,6 @@
 ﻿namespace FabricCutter.UI.Logic
 {
-	public class Marker : MarkerBase
+	public class Marker : MarkerBase, IMarkerBase
 	{
 		public SubMarker? SubMarker { get;  set; }
 		

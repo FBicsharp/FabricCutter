@@ -1,112 +1,44 @@
 ﻿@using FabricCutter.UI.Logic
 @using FabricCutter.UI.Logic.Events
-@inject IEventHub _eventHub
+@inject IRecipeInformationViewModel _viewModel
+
 <div class="length-component-separator"></div>
 <div class="length-component-up">
 	<div class="row">
 		<div class="label">Total Length:</div>
-		<div class="value">@RecipeInformation?.TotalLenght</div>
+		<div class="value">@_viewModel.TotalLenght</div>
 	</div>
 	<div class="row">
 		<div class="label">Markers Length:</div>
-		<div class="value">@RecipeInformation?.MarkersLenght</div>
+		<div class="value">@_viewModel.MarkersLenght</div>
 	</div>
 	<div class="row">
 		<div class="label">N° Splices:</div>
-		<div class="value">@RecipeInformation?.SplicesNumber</div>
+		<div class="value">@_viewModel.SplicesNumber</div>
 	</div>
 	<div class="row">
 		<div class="label">N° Markers:</div>
-		<div class="value">@RecipeInformation?.MarkersNumber</div>
+		<div class="value">@_viewModel.MarkersNumber</div>
 	</div>
 	<div class="row">
 		<div class="label">Absolute Position:</div>
-		<div class="value">@RecipeInformation?.AbsolutePosition</div>
+		<div class="value">@_viewModel.AbsolutePosition</div>
 	</div>
 </div>
 <div class="length-component-separator-down"></div>
 
-@code {	
-	public IRecipeInformation RecipeInformation { get; set; } = new RecipeInformation();
+@code {
 
 
 
-	protected override Task OnAfterRenderAsync(bool firstRender)
+
+	protected override void OnInitialized()
 	{
-		if (firstRender)
-		{
-			_eventHub.Subscribe(ApplicationEvents.OnMarkerAdded, OnPointerPositionChanged);
-		}
-		return base.OnAfterRenderAsync(firstRender);
+		_viewModel.StateHasChanged = StateHasChanged;
+		base.OnInitialized();	
 	}
 
-
-	private void OnPointerPositionChanged(ApplicationEvents applicationEvents, object value)
-	{
-		var message = EventArgsAdapter.GetEventArgs<MarkerAddedEventArgs>(applicationEvents, value);
-		if (value is not null)
-		{
-			this.RecipeInformation.EvalutateMarkers(message.markersList);
-			Console.WriteLine("RecipeInformationComponent: OnPointerPositionChanged");
-			StateHasChanged();
-		}
-	}
 
 
 
 }
-<style>
-	.length-component-separator-up {
-		border-top: 5px solid gray;		
-		width: 100%;
-		margin-top: 10px ;
-	}
-
-	.length-component-separator-down {
-		border-top: 5px solid gray;
-		width: 100%;
-		margin-bottom: 10px;
-	}
-	.length-component {
-		padding: 10px;
-		margin-bottom: 20px;
-		display: inline-flex;
-		flex-direction: row;
-		justify-content:space-between;
-		width: 100%;
-	}
-
-	.row {
-		display: inline-block;
-		align-items: center;
-		margin: 10px;
-	}
-
-	.label {
-		width: 100px;
-		color: black;
-		font-size: 1rem;
-		font-weight: bold;
-		display: inline;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.value {
-		flex: 1;
-		text-align: center;
-		color: gray;
-		font-size: 1rem;
-		font-weight: bold;
-	}
-
-	.position {
-		display: inline-block;
-		/* width: 50px; */
-		height: 30px;
-		line-height: 30px;
-		text-align: center;
-		border: 1px solid black;
-		margin-right: 10px;
-	}
-</style>

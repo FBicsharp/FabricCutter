@@ -11,15 +11,13 @@ namespace FabricCutter.UI.Logic
     public class Recipe : IRecipe
 	{
 
-		public IRecipeInformation RecipeInformation {get; set; }
 		public ISlider Slider {get; set; }
 		public IRecipeDetailJsonFactory RecipeDetailJsonFactory { get; }
 		public IMarkersCommandViewModel MarkersCommand { get; set; }
 
-		public Recipe(IRecipeInformation recipeInformation, ISlider slider, IRecipeDetailJsonFactory recipeDetailJsonFactory, IMarkersCommandViewModel markersCommand)
+		public Recipe( ISlider slider, IRecipeDetailJsonFactory recipeDetailJsonFactory, IMarkersCommandViewModel markersCommand)
 		{
 			Slider = slider;			
-			RecipeInformation = recipeInformation;
 			RecipeDetailJsonFactory = recipeDetailJsonFactory;
 			MarkersCommand = markersCommand;
 			

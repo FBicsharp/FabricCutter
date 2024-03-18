@@ -1,12 +1,4 @@
 ﻿
-.marker-button {
-    display: flex;
-    flex-direction: column;
-    height: 5rem;
-    width: 5rem;
-}
-
-
 .length-component-separator-up {
     border-top: 5px solid gray;
     width: 100%;

@@ -10,27 +10,12 @@ namespace FabricCutter.UI.Logic
 	/// </summary>
 	public class RecipeDetailJsonFactory : IRecipeDetailJsonFactory
 	{
+		
 
-		private IRecipeInformation RecipeInformation { get; }
-
-		public RecipeDetailJsonFactory(IRecipeInformation recipeInformation)
+		public string Create(List<IMarkerBase> markerList)
 		{
-			RecipeInformation = recipeInformation;
-		}
-
-
-		public string Create()
-		{
-			var recipeDetail = new RecipeDetail();
-			recipeDetail.Name = "Ricetta";
-			recipeDetail.CreationDate = DateTime.UtcNow;
-			recipeDetail.TotalLenght = RecipeInformation.TotalLenght;
-			recipeDetail.MarkersLenght = RecipeInformation.MarkersLenght;
-			recipeDetail.SplicesNumber = RecipeInformation.SplicesNumber;
-			recipeDetail.MarkersNumber = RecipeInformation.MarkersNumber;
-			recipeDetail.AbsolutePosition = RecipeInformation.AbsolutePosition;
-			recipeDetail.Markers = RecipeInformation.Markers;
-			return JsonConvert.SerializeObject(recipeDetail);
+			
+			return JsonConvert.SerializeObject(markerList);
 
 		}
 
