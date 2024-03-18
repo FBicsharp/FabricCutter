@@ -1,12 +1,19 @@
 ﻿@using FabricCutter.UI.Logic
-
+@using FabricCutter.UI.Service
+@inject ApplicationSettings _settings
 
 <div class="marker-delimitator marker-start" style=@startDelimitatorStyle>
 </div>
-<div class="marker-content" style=@contentStyle>
-</div>
-<div class="marker-delimitator marker-end" style=@endDelimitatorStyle>
-</div>
+@if (Marker.StartPosition > 0 && Marker.EndPosition > 0)
+{
+	<div class="marker-content" style=@contentStyle>
+	</div>	
+}
+@if (Marker.EndPosition > 0)
+{
+	<div class="marker-delimitator marker-end" style=@endDelimitatorStyle>
+	</div>
+}
 <div class="marker-descriptor" style=@descriptorStyle>
 	@String.Format("M{0}", Marker.Id)
 </div>
@@ -33,13 +40,15 @@
 	protected override Task OnParametersSetAsync()
 	{
 		//start="z-index:106; right:700px; " end="z-index:106; right:500px; " idx="z-index:107; right:500px; width:200px;"
-		startDelimitatorStyle = $"z-index:{100 + Marker.Id}; right:{Marker.StartPosition}px; ";
-		contentStyle = $"z-index:{101 + Marker.Id}; right:{Marker.EndPosition}px; width:{Marker.MarkerLenght }px; ";
-		endDelimitatorStyle = $"z-index:{100 + Marker.Id}; right:{Marker.EndPosition}px; ";
-		descriptorStyle = $"z-index:{100 + Marker.Id}; right:{Marker.StartPosition}px; ";
+		
+		startDelimitatorStyle = $"z-index:{100 + Marker.Id}; right: calc(({Marker.StartPosition} / {_settings.SliderLenght}) * 100%); ";
+		contentStyle = $"z-index:{101 + Marker.Id}; right: calc(({Marker.EndPosition} / {_settings.SliderLenght}) * 100%); width: calc(({Marker.MarkerLenght} / {_settings.SliderLenght}) * 100%); ";
+		endDelimitatorStyle = $"z-index:{100 + Marker.Id}; right: calc(({Marker.EndPosition} / {_settings.SliderLenght}) * 100%); ";
+		descriptorStyle = $"z-index:{100 + Marker.Id}; right: calc(({Marker.StartPosition} / {_settings.SliderLenght}) * 100%); ";
 
 
 		return base.OnParametersSetAsync();
+		StateHasChanged();
 	}
 
 
