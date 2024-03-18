@@ -1,12 +1,25 @@
 ﻿
 .marker-button {
     display: flex;
-    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    border-radius: 30%;
+    border: none; 
+    background-color: transparent; 
+    /*cursor: pointer;*/ 
     height: 5rem;
     width: 5rem;
+    font-size: 3rem;
+    
 }
 
-
+.marker-button-marker {
+    background-color: #59D5E0;
+}
+.marker-button-submarker {
+    background-color: #FAA300;
+}
+    
 .length-component-separator-up {
     border-top: 5px solid gray;
     width: 100%;
@@ -29,8 +42,9 @@
 }
 
 .row {
-    display: inline-block;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     margin: 10px;
 }
 
