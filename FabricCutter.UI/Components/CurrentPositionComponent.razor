@@ -1,36 +1,24 @@
-﻿@using FabricCutter.UI.Logic.Events
-@using FabricCutter.UI.Logic;
-@inject IEventHub EventHub
+﻿@inject ICurrentPositionViewModel _viewModel
 
 <div class="row">
 	<div class="label">CURRENT POSITION:</div>
-	<div class="value">@currentPosition</div>
+	<div class="value">@_viewModel.currentPosition</div>
 </div>
  
 
-@code {	
-	public int currentPosition { get; set; }
+@code {		
 
 	protected override Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
 		{
-			EventHub.Subscribe(ApplicationEvents.OnPointerPositionChanged, OnIntegerReceived);
+			_viewModel.StateHasChanged = StateHasChanged;
 		}
 		return base.OnAfterRenderAsync(firstRender);
 	}
 
+	
 
-	private void OnIntegerReceived(ApplicationEvents applicationEvents,object value)
-	{
-		var message =EventArgsAdapter.GetEventArgs<PointerPositionChangedEventArgs>(applicationEvents, value);
-		if (value is not null)
-		{
-			currentPosition = message.pointerPosition;
-			Console.WriteLine(currentPosition);
-			StateHasChanged();
-		}
-	}
 
 
 }

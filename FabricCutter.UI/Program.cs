@@ -29,12 +29,16 @@ builder.Services.AddScoped<ISlider, Slider>();
 builder.Services.AddScoped<IRecipeInformation, RecipeInformation> ();
 builder.Services.AddScoped<IRecipeDetailJsonFactory, RecipeDetailJsonFactory> ();
 builder.Services.AddScoped<IMarkerFactory, MarkerFactory> ();
-builder.Services.AddScoped<IMarkersCommandViewModel, MarkersCommandViewModel> ();
-builder.Services.AddScoped<IMarkersCommandViewModel, MarkersCommandViewModel> ();
-builder.Services.AddScoped<IMarkerFactoryValidator, MarkerFactoryValidator> ();
+
+
 
 builder.Services.AddSingleton<IEventHub,EventHub>();
 builder.Services.AddSingleton<IMarkerService, MarkerService>();
+builder.Services.AddScoped<ICurrentPositionViewModel, CurrentPositionViewModel> ();
+builder.Services.AddScoped<IMarkersCommandViewModel, MarkersCommandViewModel> ();
+
+
+
 
 
 

@@ -2,7 +2,7 @@
 
 namespace FabricCutter.UI.ViewModel
 {
-    public interface IMarkersCommandViewModel 
+    public interface IMarkersCommandViewModel :IViewModel
     {
         bool IsStartMarkerEnable { get; }
         bool IsEndMarkerEnable { get; }

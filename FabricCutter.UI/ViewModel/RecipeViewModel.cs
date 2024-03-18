@@ -13,9 +13,9 @@ namespace FabricCutter.UI.ViewModel
 		public IRecipe Recipe { get; }
 		
 
-		public Action StateHasChenged { get; set; }= () => { };
-        public RecipeViewModel(
+		public Action StateHasChanged { get; set; }= () => { };
 
+		public RecipeViewModel(
 			IToastService toastService, 
 			IJSRuntime jSRuntime,
 			IRecipe recipe
@@ -27,10 +27,9 @@ namespace FabricCutter.UI.ViewModel
 			
 		}
 
-		public void OnAddNewMarkerComplete(Marker newMarker)
-		{			
-			Recipe.Slider.AddMarker(newMarker);
+		public void Dispose()
+		{
+			
 		}
-
 	}
 }

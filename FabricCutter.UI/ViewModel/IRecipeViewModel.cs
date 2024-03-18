@@ -2,14 +2,9 @@
 
 namespace FabricCutter.UI.ViewModel
 {
-    public interface IRecipeViewModel
-	{
-		
-		public Action StateHasChenged { get; set; }
+    public interface IRecipeViewModel : IViewModel
+	{	
 		IRecipe Recipe { get; }
-
-		public void OnAddNewMarkerComplete(Marker newMarker);
-
 
 	}
 }

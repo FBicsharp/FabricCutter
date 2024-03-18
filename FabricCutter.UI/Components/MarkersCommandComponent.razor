@@ -1,11 +1,11 @@
 ﻿@using FabricCutter.UI.Logic
-@inject IMarkersCommandViewModel ViewModel
+@inject IMarkersCommandViewModel _viewModel
 
 <div class="length-component">
 	<div class="row">
-		@if (ViewModel.IsStartMarkerEnable)
+		@if (_viewModel.IsStartMarkerEnable)
 		{
-			<button type="button" class="marker-button" @onclick=@ViewModel.StartMarker></button>
+			<button type="button" class="marker-button" @onclick=@_viewModel.StartMarker></button>
 		}
 		else
 		{
@@ -15,9 +15,9 @@
 		<div class="label">AC</div>		
 	</div>
 	<div class="row">
-		@if (ViewModel.IsStartSubMarkerEnable)
+		@if (_viewModel.IsStartSubMarkerEnable)
 		{
-			<button type="button" class="marker-button" @onclick=@ViewModel.StartSubMarker></button>
+			<button type="button" class="marker-button" @onclick=@_viewModel.StartSubMarker></button>
 		}
 		else
 		{
@@ -27,9 +27,9 @@
 		<div class="label">AS</div>
 	</div>
 	<div class="row">
-		@if (ViewModel.IsEndSubMarkerEnable)
+		@if (_viewModel.IsEndSubMarkerEnable)
 		{
-			<button type="button" class="marker-button" @onclick=@ViewModel.EndSubMarker></button>
+			<button type="button" class="marker-button" @onclick=@_viewModel.EndSubMarker></button>
 		}
 		else
 		{
@@ -38,9 +38,9 @@
 		<div class="label">LS</div>
 	</div>
 	<div class="row">
-		@if (ViewModel.IsEndMarkerEnable)
+		@if (_viewModel.IsEndMarkerEnable)
 		{
-			<button type="button" class="marker-button" @onclick=@ViewModel.EndMarker></button>
+			<button type="button" class="marker-button" @onclick=@_viewModel.EndMarker></button>
 		}
 		else
 		{

@@ -26,7 +26,7 @@ namespace FabricCutter.UI.ViewModel
 
         private int PointerPosition { get; set; }
         private List<Marker> Markers { get; set; }
-
+		public Action StateHasChanged { get; set; } = () => { };
 
 		private readonly IEventHub _eventHub;
         readonly IMarkerFactory _markerFactory;
@@ -72,52 +72,61 @@ namespace FabricCutter.UI.ViewModel
 
 		}
 
+		private void UnsubscribeEvents()
+		{
+			_eventHub.Unsubscribe(ApplicationEvents.OnPointerPositionChanged,
+				(applicationEvents, value)
+				=> PointerPosition = EventArgsAdapter.GetEventArgs<PointerPositionChangedEventArgs>(applicationEvents, value).pointerPosition
+				//gestisco il cambi odi posizione per trovare quale elemento è su questa posizione
+				);
+
+			_eventHub.Unsubscribe(ApplicationEvents.OnAddMarker, null);
+			//aggiorna la mia lista di marker e poi //gestisco il cambi odi posizione per trovare quale elemento è su questa posizione
+			//infine imposta a null quello corretne perche è stato aggiunto
+
+
+			_eventHub.Unsubscribe(ApplicationEvents.OnResetMarker, null);
+			//resetta la lista di marker corrente e riabilita i pulsanti
+
+
+		}
+
 
 
 		public void StartMarker()
         {
-            var m = new Logic.Marker(1, 700, 500)
-            {
-                SubMarker = new Logic.SubMarker(1, 650, 550)
-            };
-
-            var args = new MarkerAddEventArgs(m);
-			_eventHub.Publish(ApplicationEvents.OnAddMarker, args);
-
-			m =new Logic.Marker(2, 750, 550)
-            {
-                SubMarker = new Logic.SubMarker(2, 700, 600)
-            };
-			args = new MarkerAddEventArgs(m);
-			_eventHub.Publish(ApplicationEvents.OnAddMarker, args);
-			return;
 
 			var newId = Markers.Count > 0 ? Markers.Max(m => m.Id) : 1;
-            _markerFactory.WithStartMarkerPosition(newId, PointerPosition);
+            var newmarker   =_markerFactory.WithStartMarkerPosition(newId, PointerPosition);
+
+			
+
+			var args = new MarkerAddEventArgs(newmarker);
+			_eventHub.Publish(ApplicationEvents.OnAddMarker, args);
         }
 
         public void EndMarker()
         {
-            _markerFactory.WithStopMarkerPosition(PointerPosition);
-			var args = new MarkerAddEventArgs((Marker)_markerFactory.Build());
-			_eventHub.Publish(ApplicationEvents.OnAddMarker, args);
+			var newmarker  = _markerFactory.WithStopMarkerPosition(PointerPosition);
+			var args = new MarkerUpdateEventArgs(newmarker);
+			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);
 
 		}
 
-        public void EndSubMarker()
-        {
-            _markerFactory.WithStopSubMarkerPosition(PointerPosition);
-        }
 
         public void StartSubMarker()
         {
-            _markerFactory.WithStartSubMarkerPosition(PointerPosition);
-        }
-
-        public void FindMarkerSubMarker()
+            var newmarker = _markerFactory.WithStartSubMarkerPosition(PointerPosition);
+			var args = new MarkerUpdateEventArgs(newmarker);
+			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);
+		}
+        public void EndSubMarker()
         {
-            _markerFactory.WithStartSubMarkerPosition(PointerPosition);
-        }
+            var newmarker = _markerFactory.WithStopSubMarkerPosition(PointerPosition);
+			var args = new MarkerUpdateEventArgs(newmarker);
+			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);
+		}
+               
 
 
         /// <summary>
@@ -179,8 +188,10 @@ namespace FabricCutter.UI.ViewModel
 
         }
 
-
-
-    }
+		public void Dispose()
+		{
+            UnsubscribeEvents();
+		}
+	}
 
 }

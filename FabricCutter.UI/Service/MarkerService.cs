@@ -43,6 +43,15 @@ namespace FabricCutter.UI.Service
 						await ResetMarkersAsync();
 					}
 				});
+			_eventHub.Subscribe(ApplicationEvents.OnUpdateMarker,
+				async (applicationEvents, value) =>
+				{
+					var message = EventArgsAdapter.GetEventArgs<MarkerUpdateEventArgs>(applicationEvents, value);
+					if (message is not null)
+					{
+						await AddMarkersAsync(message.updatedMarker);
+					}
+				});
 
 
 		}
@@ -62,7 +71,21 @@ namespace FabricCutter.UI.Service
 			return Task.FromResult(true);
 		}
 
-		
+		public Task<bool> UpdateMarkersAsync(Marker updatedMarker)
+		{
+			var existingMarker=InMemoryMarker.Find(x => x.Id == updatedMarker.Id);
+			if (existingMarker is null)
+				return Task.FromResult(false);
+
+			InMemoryMarker.Remove(existingMarker);
+			InMemoryMarker.Add(updatedMarker);
+			var args = new MarkerAddedEventArgs(InMemoryMarker);
+			_eventHub.Publish(ApplicationEvents.OnMarkerUpdated, args);
+			return Task.FromResult(true);
+		}
+
+
+
 		public Task ResetMarkersAsync()
 		{
 			InMemoryMarker.Clear();
