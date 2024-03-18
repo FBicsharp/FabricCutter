@@ -49,7 +49,7 @@ namespace FabricCutter.UI.Service
 					var message = EventArgsAdapter.GetEventArgs<MarkerUpdateEventArgs>(applicationEvents, value);
 					if (message is not null)
 					{
-						await AddMarkersAsync(message.updatedMarker);
+						await UpdateMarkersAsync(message.updatedMarker);
 					}
 				});
 
@@ -79,7 +79,7 @@ namespace FabricCutter.UI.Service
 
 			InMemoryMarker.Remove(existingMarker);
 			InMemoryMarker.Add(updatedMarker);
-			var args = new MarkerAddedEventArgs(InMemoryMarker);
+			var args = new MarkerUpdatedEventArgs(InMemoryMarker);
 			_eventHub.Publish(ApplicationEvents.OnMarkerUpdated, args);
 			return Task.FromResult(true);
 		}

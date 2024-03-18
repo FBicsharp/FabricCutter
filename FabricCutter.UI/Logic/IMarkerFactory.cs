@@ -3,6 +3,7 @@
 	public interface IMarkerFactory
 	{
 		MarkerBase Build();
+		void Clear();
 		Marker WithStartMarkerPosition(int newMarkerId, int startPosition);
 		Marker WithStartSubMarkerPosition(int startPosition);
 		Marker WithStopMarkerPosition(int endPosition);

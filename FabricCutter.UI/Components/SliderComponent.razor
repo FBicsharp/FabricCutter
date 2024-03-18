@@ -41,8 +41,9 @@
 	{
 		if (firstRender)
 		{
-			_eventHub.Subscribe(ApplicationEvents.OnMarkerAdded, OnMarkerAdded);
-			_eventHub.Subscribe(ApplicationEvents.OnMarkerUpdated, OnMarkerUpdated);
+			_eventHub.Subscribe(ApplicationEvents.OnMarkerAdded, OnMarkerAddedhandler);
+			_eventHub.Subscribe(ApplicationEvents.OnMarkerUpdated, OnMarkerUpdatedHandler);
+			_eventHub.Subscribe(ApplicationEvents.OnResetMarker, OnResetMarkerhandler);
 			//invio il messaggio all'inizializzazione
 			SendPointerPositionChangeMesage();
 
@@ -58,7 +59,7 @@
 		_eventHub.Publish(ApplicationEvents.OnPointerPositionChanged, args);
 	}
 
-	private void OnMarkerAdded(ApplicationEvents applicationEvents, object value)
+	private void OnMarkerAddedhandler(ApplicationEvents applicationEvents, object value)
 	{
 		var message = EventArgsAdapter.GetEventArgs<MarkerAddedEventArgs>(applicationEvents, value);
 		if (message is not null)
@@ -67,13 +68,23 @@
 			StateHasChanged();
 		}
 	}
-	private void OnMarkerUpdated(ApplicationEvents applicationEvents, object value)
+	private void OnMarkerUpdatedHandler(ApplicationEvents applicationEvents, object value)
 	{
 		var message = EventArgsAdapter.GetEventArgs<MarkerUpdatedEventArgs>(applicationEvents, value);
 		if (message is not null)
 		{
 			Markers = message.markersList;
 			StateHasChanged();
+		}
+	}
+
+	private void OnResetMarkerhandler(ApplicationEvents applicationEvents, object value)
+	{
+		var message = EventArgsAdapter.GetEventArgs<MarkerResetEventArgs>(applicationEvents, value);
+		if (message is not null)
+		{
+			StateHasChanged();
+
 		}
 	}
 

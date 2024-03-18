@@ -20,9 +20,9 @@ namespace FabricCutter.UI.Logic
 		{
 			Markers = markers;
 			var cnt = Markers.Count();
-			var tmpLenght = cnt > 0 ? (Markers.Max(m => m.StartPosition) - Markers.Min(m => m.EndPosition)) : 0;
+			var tmpLenght = 0;//cnt > 0 ? (Markers.Max(m => m.StartPosition) - Markers.Min(m => m.EndPosition)) : 0;
 			TotalLenght = tmpLenght < 0 ? 0 : tmpLenght;
-			MarkersLenght = cnt > 0 ? Markers.Sum(m => m.MarkerLenght) : 0;
+			MarkersLenght = 0;//cnt > 0 ? Markers.Sum(m => m.MarkerLenght) : 0;
 			SplicesNumber = cnt;
 			MarkersNumber = cnt;
 			AbsolutePosition = 0;//non se parte da sx o dx

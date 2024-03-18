@@ -2,30 +2,38 @@
 {
 	public class MarkerFactory : IMarkerFactory
 	{
-		private Marker _currentMarker { get; set; }        
+		private Marker _currentMarker { get; set; }
 
 
-        public MarkerBase Build()
+		public void Clear()
+		{
+			_currentMarker = null;
+		}
+
+		public MarkerBase Build()
 		{
 			//_markerFactoryValidator.Validate(_currentMarker);
 			//if (!_markerFactoryValidator.IsValid)
 			//{
 			//	return new MarkerInvalid();
 			//}
+			var result = _currentMarker;
+			Clear();
 
-			return _currentMarker;
+			return result;
 		}
 
 		public Marker WithStartMarkerPosition(int newMarkerId, int startPosition)
 		{
-			_currentMarker = new Marker(newMarkerId, startPosition, int.MinValue);
+			if (_currentMarker is null)//fino a quando non finisco di creare il marker ottengo quello corrente
+				_currentMarker = new Marker(newMarkerId, startPosition, int.MinValue);
 			return _currentMarker;
 		}
 		public Marker WithStopMarkerPosition(int endPosition)
 		{
 			if (_currentMarker is null)
 				return _currentMarker;
-			if (_currentMarker.EndPosition >= _currentMarker.StartPosition)
+			if (endPosition <= _currentMarker.StartPosition)
 				return _currentMarker;
 			_currentMarker.EndPosition = endPosition;
 			return _currentMarker;
@@ -35,7 +43,7 @@
 		{
 			if (_currentMarker is null || _currentMarker.SubMarker is null)
 				return _currentMarker;
-			_currentMarker.SubMarker = new SubMarker(_currentMarker.Id,startPosition, int.MinValue);
+			_currentMarker.SubMarker = new SubMarker(_currentMarker.Id, startPosition, int.MinValue);
 			return _currentMarker;
 		}
 		public Marker WithStopSubMarkerPosition(int endPosition)
@@ -53,5 +61,5 @@
 
 	}
 
-	
+
 }

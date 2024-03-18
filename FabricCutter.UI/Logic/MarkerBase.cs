@@ -7,7 +7,7 @@
 		public virtual int Id { get; set; }
 		public virtual int StartPosition { get; set; }
         public virtual int EndPosition { get; set; }
-		public virtual int MarkerLenght => (StartPosition-EndPosition );
+		public virtual int MarkerLenght => (EndPosition -StartPosition);
 
 		public MarkerBase(int markerId, int startPosition, int endPosition)
 		{
