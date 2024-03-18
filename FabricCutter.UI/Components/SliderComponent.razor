@@ -42,6 +42,7 @@
 		if (firstRender)
 		{
 			_eventHub.Subscribe(ApplicationEvents.OnMarkerAdded, OnMarkerAdded);
+			_eventHub.Subscribe(ApplicationEvents.OnMarkerUpdated, OnMarkerUpdated);
 			//invio il messaggio all'inizializzazione
 			SendPointerPositionChangeMesage();
 
@@ -66,5 +67,16 @@
 			StateHasChanged();
 		}
 	}
+	private void OnMarkerUpdated(ApplicationEvents applicationEvents, object value)
+	{
+		var message = EventArgsAdapter.GetEventArgs<MarkerUpdatedEventArgs>(applicationEvents, value);
+		if (message is not null)
+		{
+			Markers = message.markersList;
+			StateHasChanged();
+		}
+	}
+
+	
 
 }
