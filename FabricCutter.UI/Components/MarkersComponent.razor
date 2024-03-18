@@ -2,14 +2,17 @@
 @using FabricCutter.UI.Service
 @inject ApplicationSettings _settings
 
-<div class="marker-delimitator marker-start" style=@startDelimitatorStyle>
-</div>
+@if (Marker.StartPosition >= 0 && Marker.EndPosition <= 0)//mosta solo mentre lo crea
+{
+	<div class="marker-delimitator marker-start" style=@startDelimitatorStyle>
+	</div>
+}
 @if (Marker.StartPosition >= 0 && Marker.EndPosition >= 0)
 {
 	<div class="marker-content" style=@contentStyle>
 	</div>	
 }
-@if (Marker.EndPosition > 0)
+@if (Marker.EndPosition > 0 && false)
 {
 	<div class="marker-delimitator marker-end" style=@endDelimitatorStyle>
 	</div>
