@@ -41,13 +41,30 @@
 
 
 	protected override Task OnParametersSetAsync()
-	{
-		//start="z-index:106; right:700px; " end="z-index:106; right:500px; " idx="z-index:107; right:500px; width:200px;"
+	{		
+
+		int maxMargin = -15; // Massimo margine
+		int minMargin = 10; // Minimo margine		
+		int calculatedMargin = (int)(((Marker.StartPosition / (double)_settings.SliderLenght) * (maxMargin - minMargin)) + minMargin);
+
+		//$"margin-left: {calculatedMargin}px;";
+
 		
-		startDelimitatorStyle = $"z-index:{100 + Marker.Id}; left: calc(({Marker.StartPosition } / {_settings.SliderLenght }) * 100%); ";
-		contentStyle = $"z-index:{101 + Marker.Id}; left: calc(({Marker.StartPosition} / {_settings.SliderLenght}) * 100%); width: calc(({Marker.MarkerLenght} / {_settings.SliderLenght}) * 100%); ";
+		startDelimitatorStyle = $"z-index:{100 + Marker.Id}; "+
+								$"left: calc(({Marker.StartPosition } / {_settings.SliderLenght }) * 100%); "+
+								$"margin-left: {calculatedMargin}px;";
+
+
+		contentStyle =	$" z-index:{101 + Marker.Id};  " +
+						$" left: calc(({Marker.StartPosition} / {_settings.SliderLenght}) * 100%);  " +
+						$" width: calc(({Marker.MarkerLenght} / {_settings.SliderLenght}) * 100%);  " +
+						$" margin-left: {calculatedMargin}px;";
+
 		endDelimitatorStyle = $"z-index:{100 + Marker.Id}; left: calc(({Marker.EndPosition} / {_settings.SliderLenght}) * 100%); ";
-		descriptorStyle = $"z-index:{100 + Marker.Id}; left: calc(({Marker.StartPosition} / {_settings.SliderLenght}) * 100%); ";
+
+		descriptorStyle = $" z-index:{100 + Marker.Id}; " +
+						$" left: calc(({Marker.StartPosition} / {_settings.SliderLenght}) * 100%); " +
+						$" margin-left: {calculatedMargin-20}px;";
 
 
 		StateHasChanged();
