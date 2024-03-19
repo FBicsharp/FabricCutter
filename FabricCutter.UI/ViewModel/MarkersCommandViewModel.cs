@@ -100,7 +100,7 @@ namespace FabricCutter.UI.ViewModel
 		public void StartMarker()
 		{
 
-			var newId = Markers.Count > 0 ? Markers.Max(m => m.Id) : 1;
+			var newId = Markers.Count > 0 ? Markers.Max(m => m.Id)+1 : 1;
 			var newmarker = _markerFactory.WithStartMarkerPosition(newId, PointerPosition);
 			var sameMarker = Markers.FirstOrDefault(m => m.Id == newmarker.Id);
 			if (sameMarker is not null)
@@ -127,6 +127,7 @@ namespace FabricCutter.UI.ViewModel
 			}
 			var args = new MarkerUpdateEventArgs(newmarker);
 			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);
+			_markerFactory.Clear();
 			var args2 = new PointerPositionStartOrEndEventArgs(false, true);
 			_eventHub.Publish(ApplicationEvents.OnPointerPositionStartOrEndChanged, args2);
 		}
