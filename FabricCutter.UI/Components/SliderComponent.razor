@@ -1,93 +1,33 @@
 ﻿@using FabricCutter.UI.Logic
 @using FabricCutter.UI.Logic.Events
 @using FabricCutter.UI.Service
-@inject IEventHub _eventHub
-@inject IMarkerService _markerService
+@inject ISliderViewModel _viewModel
 <div class="slider-container">
 
 	<div class="slider-content">
 		<div class="slider-header"></div>
-		@if (Markers is not null)
+		<CursorPositionComponent></CursorPositionComponent>
+		@if (_viewModel.Markers is not null)
 		{
-			@foreach (var marker in Markers)
+			@foreach (var marker in _viewModel.Markers)
 			{
-				<MarkersComponent Marker=@marker></MarkersComponent>
+				<MarkersComponent Marker=@(marker as Marker)></MarkersComponent>
 			}
 		}
 	</div>
-	<input type="range" class="slider-range" min="0" max=@Slider.SliderLenght value=@Slider.PointerPosition @onchange=@OnChange />
+	<input type="range" class="slider-range" min="0" max=@_viewModel.SliderLenght value=@_viewModel.PointerPosition @oninput=@_viewModel.OnPositionPointerChange />
+	@* @onchange=@_viewModel.OnPositionPointerChange *@
 </div>
 
 
 
 
 @code {
-	[Parameter]
-	public ISlider Slider { get; set; }
 
-	List<Marker> Markers { get; set; }
-
-	[Parameter]
-	public EventCallback<ISlider> SliderChanged { get; set; }
-
-	protected void OnChange(ChangeEventArgs e)
+	protected override void OnInitialized()
 	{
-		Slider.PointerPosition = Convert.ToInt32(e.Value);
-		SendPointerPositionChangeMesage();
-		SliderChanged.InvokeAsync(Slider);
+		_viewModel.StateHasChanged= StateHasChanged;
+		
+		base.OnInitialized();
 	}
-
-	protected override Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			_eventHub.Subscribe(ApplicationEvents.OnMarkerAdded, OnMarkerAddedhandler);
-			_eventHub.Subscribe(ApplicationEvents.OnMarkerUpdated, OnMarkerUpdatedHandler);
-			_eventHub.Subscribe(ApplicationEvents.OnResetMarker, OnResetMarkerhandler);
-			//invio il messaggio all'inizializzazione
-			SendPointerPositionChangeMesage();
-
-		}
-		return base.OnAfterRenderAsync(firstRender);
-	}
-
-
-
-	private void SendPointerPositionChangeMesage()
-	{
-		var args = new PointerPositionChangedEventArgs(Slider.PointerPosition);
-		_eventHub.Publish(ApplicationEvents.OnPointerPositionChanged, args);
-	}
-
-	private void OnMarkerAddedhandler(ApplicationEvents applicationEvents, object value)
-	{
-		var message = EventArgsAdapter.GetEventArgs<MarkerAddedEventArgs>(applicationEvents, value);
-		if (message is not null)
-		{
-			Markers = message.markersList;
-			StateHasChanged();
-		}
-	}
-	private void OnMarkerUpdatedHandler(ApplicationEvents applicationEvents, object value)
-	{
-		var message = EventArgsAdapter.GetEventArgs<MarkerUpdatedEventArgs>(applicationEvents, value);
-		if (message is not null)
-		{
-			Markers = message.markersList;
-			StateHasChanged();
-		}
-	}
-
-	private void OnResetMarkerhandler(ApplicationEvents applicationEvents, object value)
-	{
-		var message = EventArgsAdapter.GetEventArgs<MarkerResetEventArgs>(applicationEvents, value);
-		if (message is not null)
-		{
-			StateHasChanged();
-
-		}
-	}
-
-	
-
 }

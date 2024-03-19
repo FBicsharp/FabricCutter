@@ -48,10 +48,13 @@ namespace FabricCutter.UI.Logic.Events
 		OnMarkerReseted,
 		OnExportRecipe,
 		OnExportedRecipe,
-		OnConfirmed
+		OnConfirmed,
+		OnPointerPositionStartOrEndChanged
 	}
 
 	public record PointerPositionChangedEventArgs(int pointerPosition);
+	public record PointerPositionStartOrEndEventArgs( bool IsEnd = false, bool IsStart = false);
+
 	public record MarkerAddEventArgs(Marker newMarker);
 	public record MarkerAddedEventArgs(List<Marker> markersList);
 	public record MarkerUpdateEventArgs(Marker updatedMarker);
@@ -87,6 +90,8 @@ namespace FabricCutter.UI.Logic.Events
 					return args is MarkerExportedEventArgs exportedArgs ? (T)(object)exportedArgs : default;
 				case ApplicationEvents.OnConfirmed:
 					return (T)args;
+				case ApplicationEvents.OnPointerPositionStartOrEndChanged:
+					return args is PointerPositionStartOrEndEventArgs pointerStartOrEndArgs ? (T)(object)pointerStartOrEndArgs : default;
 
 
 				default:

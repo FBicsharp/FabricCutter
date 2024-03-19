@@ -41,6 +41,7 @@ namespace FabricCutter.UI.ViewModel
 
 		public void OnReset()
 		{
+			_eventHub.Publish(ApplicationEvents.OnPointerPositionStartOrEndChanged, new PointerPositionStartOrEndEventArgs());
 			_eventHub.Publish(ApplicationEvents.OnResetMarker, new MarkerResetEventArgs());
 		}
 	}

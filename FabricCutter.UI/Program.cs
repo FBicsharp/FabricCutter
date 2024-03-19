@@ -25,7 +25,7 @@ builder.Services.AddScoped(sp => new HttpClient
 builder.Services.AddScoped<IMarkerService, MarkerService>();
 builder.Services.AddScoped<IRecipeViewModel, RecipeViewModel>();
 
-builder.Services.AddScoped<ISlider, Slider>();
+
 builder.Services.AddScoped<IRecipeDetailJsonFactory, RecipeDetailJsonFactory> ();
 builder.Services.AddScoped<IMarkerFactory, MarkerFactory> ();
 
@@ -37,6 +37,8 @@ builder.Services.AddScoped<ICurrentPositionViewModel, CurrentPositionViewModel> 
 builder.Services.AddScoped<IRecipeInformationViewModel, RecipeInformationViewModel> ();
 builder.Services.AddScoped<IMarkersCommandViewModel, MarkersCommandViewModel> ();
 builder.Services.AddScoped<IReciperCommandViewModel, ReciperCommandViewModel> ();
+builder.Services.AddScoped<ISliderViewModel, SliderViewModel> ();
+builder.Services.AddScoped<ICursorPositionViewModel, CursorPositionViewModel> ();
 
 
 

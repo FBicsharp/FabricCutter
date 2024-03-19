@@ -113,6 +113,9 @@ namespace FabricCutter.UI.ViewModel
 
 			var args = new MarkerAddEventArgs(newmarker);
 			_eventHub.Publish(ApplicationEvents.OnAddMarker, args);
+			var args2 = new PointerPositionStartOrEndEventArgs(true,false);
+			_eventHub.Publish(ApplicationEvents.OnPointerPositionStartOrEndChanged, args2);
+
 		}
 
 		public void EndMarker()
@@ -124,7 +127,8 @@ namespace FabricCutter.UI.ViewModel
 			}
 			var args = new MarkerUpdateEventArgs(newmarker);
 			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);
-
+			var args2 = new PointerPositionStartOrEndEventArgs(false, true);
+			_eventHub.Publish(ApplicationEvents.OnPointerPositionStartOrEndChanged, args2);
 		}
 
 
