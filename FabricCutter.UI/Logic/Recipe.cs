@@ -1,4 +1,5 @@
 ﻿using FabricCutter.UI.Components;
+using FabricCutter.UI.Service;
 using FabricCutter.UI.ViewModel;
 using System.Collections.Generic;
 
@@ -12,13 +13,18 @@ namespace FabricCutter.UI.Logic
 	{		
 		public IRecipeDetailJsonFactory RecipeDetailJsonFactory { get; }
 		public IMarkersCommandViewModel MarkersCommand { get; set; }
+		public IMarkerService MarkerService { get; set; }
 
-		public Recipe( IRecipeDetailJsonFactory recipeDetailJsonFactory, IMarkersCommandViewModel markersCommand)
+		public Recipe( 
+			IRecipeDetailJsonFactory recipeDetailJsonFactory,
+			IMarkersCommandViewModel markersCommand,
+			IMarkerService markerService
+		)
 		{
 			
 			RecipeDetailJsonFactory = recipeDetailJsonFactory;
 			MarkersCommand = markersCommand;
-			
+			MarkerService = markerService;
 		}
 
 		
