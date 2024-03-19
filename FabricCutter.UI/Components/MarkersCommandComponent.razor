@@ -54,7 +54,10 @@
 
 @code {
 
-	
+	protected override void OnInitialized()
+	{
+		_viewModel.StateHasChanged  = StateHasChanged;
+	}
 
 	
 
