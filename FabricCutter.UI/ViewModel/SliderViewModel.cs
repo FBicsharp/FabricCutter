@@ -68,6 +68,7 @@ namespace FabricCutter.UI.Logic
 			var message = EventArgsAdapter.GetEventArgs<MarkerResetEventArgs>(applicationEvents, value);
 			if (message is not null)
 			{
+				Markers.Clear();
 				StateHasChanged();
 
 			}
