@@ -186,12 +186,13 @@ namespace FabricCutter.UI.ViewModel
 #endif
 
 
-			CheckMarkerAction();
-			CheckSubMarkerAction();
+			//CheckMarkerAction();
+			//CheckSubMarkerAction();
 			StateHasChanged();
 
 
 		}
+
 
 
 
