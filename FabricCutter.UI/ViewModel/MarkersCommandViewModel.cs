@@ -175,21 +175,11 @@ namespace FabricCutter.UI.ViewModel
 
 		public void EvalutePossibleAction()
 		{
-#if DEBUG
-
 			IsStartSubMarkerEnable = true;
 			IsEndSubMarkerEnable = true;
 			IsStartMarkerEnable = true;
 			IsEndMarkerEnable = true;
 			StateHasChanged();
-			return;
-#endif
-
-
-			//CheckMarkerAction();
-			//CheckSubMarkerAction();
-			StateHasChanged();
-
 
 		}
 
