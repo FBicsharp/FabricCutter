@@ -21,7 +21,8 @@ namespace FabricCutter.UI.ViewModel
 		public bool IsEndSubMarkerEnable { get; private set; }
 
 
-		public Marker? FirstMarkerInCurrentPosition { get; private set; }
+		public Marker? MarkerInEditingMode { get; private set; }
+		public Marker? ClosestMarkerFromCurretnPosition { get; private set; }
 		public Marker? SecondMarkerInCurrentPosition { get; private set; }
 
 		private int PointerPosition { get; set; }
@@ -79,12 +80,13 @@ namespace FabricCutter.UI.ViewModel
 			EvalutePossibleAction();
 		}
 
-		
+
 
 		private void OnResetMarkerHandler(ApplicationEvents applicationEvents, object value)
 		{
 			_markerFactory.Clear();
 			Markers.Clear();
+			MarkerInEditingMode = null;
 			EvalutePossibleAction();
 		}
 
@@ -100,33 +102,40 @@ namespace FabricCutter.UI.ViewModel
 		public void StartMarker()
 		{
 
-			var newId = Markers.Count > 0 ? Markers.Max(m => m.Id)+1 : 1;
-			var newmarker = _markerFactory.WithStartMarkerPosition(newId, PointerPosition);
-			var sameMarker = Markers.FirstOrDefault(m => m.Id == newmarker.Id);
-			if (sameMarker is not null)
+			var newId = Markers.Count > 0 ? Markers.Max(m => m.Id) + 1 : 1;
+			_markerFactory.WithStartMarkerPosition(newId, PointerPosition);
+			if (MarkerInEditingMode is not null)
 			{
-				sameMarker.StartPosition = PointerPosition;
-				var update_args = new MarkerUpdateEventArgs(newmarker);
+				MarkerInEditingMode.StartPosition = PointerPosition;
+				var update_args = new MarkerUpdateEventArgs(MarkerInEditingMode);
 				_eventHub.Publish(ApplicationEvents.OnUpdateMarker, update_args);
 				return;
 			}
-
-			var args = new MarkerAddEventArgs(newmarker);
+			MarkerInEditingMode = _markerFactory.BuildMarker();
+			var args = new MarkerAddEventArgs(MarkerInEditingMode);
 			_eventHub.Publish(ApplicationEvents.OnAddMarker, args);
-			var args2 = new PointerPositionStartOrEndEventArgs(true,false);
+			var args2 = new PointerPositionStartOrEndEventArgs(true, false);
 			_eventHub.Publish(ApplicationEvents.OnPointerPositionStartOrEndChanged, args2);
 
 		}
 
 		public void EndMarker()
-		{
-			var newmarker = _markerFactory.WithStopMarkerPosition(PointerPosition);
-			if (newmarker.EndPosition == int.MinValue)
+		{		
+			if (MarkerInEditingMode is null)
 			{
-				toastService.ShowWarning("La fine deve essere dopo l'inizio");				
+				toastService.ShowWarning("Marcatore non trovato");
+				return;
 			}
-			var args = new MarkerUpdateEventArgs(newmarker);
+			_markerFactory.WithStopMarkerPosition(PointerPosition);
+			MarkerInEditingMode = _markerFactory.BuildMarker() ;
+			if (MarkerInEditingMode.EndPosition == int.MinValue)
+			{
+				toastService.ShowWarning("La fine deve essere dopo l'inizio");
+				return;
+			}
+			var args = new MarkerUpdateEventArgs(MarkerInEditingMode);
 			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);
+			MarkerInEditingMode = null;
 			_markerFactory.Clear();
 			var args2 = new PointerPositionStartOrEndEventArgs(false, true);
 			_eventHub.Publish(ApplicationEvents.OnPointerPositionStartOrEndChanged, args2);
@@ -135,78 +144,51 @@ namespace FabricCutter.UI.ViewModel
 
 		public void StartSubMarker()
 		{
-			var newmarker = _markerFactory.WithStartSubMarkerPosition(PointerPosition);
-			var args = new MarkerUpdateEventArgs(newmarker);
+			if (MarkerInEditingMode is null )
+				return;			
+			_markerFactory.WithStartSubMarkerPosition(PointerPosition);
+			MarkerInEditingMode = _markerFactory.BuildMarker() ;
+			var args = new MarkerUpdateEventArgs(MarkerInEditingMode);
 			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);
 		}
 		public void EndSubMarker()
 		{
-			var newmarker = _markerFactory.WithStopSubMarkerPosition(PointerPosition);
-			var args = new MarkerUpdateEventArgs(newmarker);
-			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);
-		}
-
-
-
-		/// <summary>
-		/// trova se nella posizione corrente è presente un marker,
-		/// </summary>
-		public void EvalutePossibleAction()
-		{
-			FirstMarkerInCurrentPosition = Markers
-				.OrderBy(m => m.Id)
-				.FirstOrDefault(m =>
-				   m.StartPosition <= PointerPosition
-				&&  PointerPosition <= (m.EndPosition== int.MinValue?int.MaxValue: m.EndPosition)//filtra i marker che non hanno una posizione di fine
-				);
-
-			if (FirstMarkerInCurrentPosition is null)
-			{// nessun marker trovato qundi posso creare un nuovo marker 
-				IsStartMarkerEnable = true;
-				IsEndMarkerEnable = false;
-				IsStartSubMarkerEnable = false;
-				IsEndSubMarkerEnable = false;
+			if (MarkerInEditingMode is null)
+			{
+				toastService.ShowWarning("Marcatore non trovato");
 				return;
 			}
+			_markerFactory.WithStopSubMarkerPosition(PointerPosition);
 
-			//da questo id devo capire se ci sono altri marker tra lo start e lo stopo per capires e posso creare un nuovo marker al suo interno
-			var exististSecondMarker = Markers
-				.OrderBy(m => m.Id)
-				.FirstOrDefault(m => m.Id != (FirstMarkerInCurrentPosition as Marker)?.Id
-				&& m.StartPosition >= FirstMarkerInCurrentPosition.StartPosition
-				&& m.EndPosition >= PointerPosition);
+			if (MarkerInEditingMode.SubMarker.Where(s=>s.EndPosition == int.MinValue).Any())
+			{
+				toastService.ShowWarning("La fine deve essere dopo l'inizio");
+				return;
+			}			
+			MarkerInEditingMode = _markerFactory.BuildMarker() ;
+			var args = new MarkerUpdateEventArgs(MarkerInEditingMode);
+			_eventHub.Publish(ApplicationEvents.OnUpdateMarker, args);			
+		}
 
-			if (FirstMarkerInCurrentPosition.StartPosition >= 0 && FirstMarkerInCurrentPosition.EndPosition <= 0)
-			{// posso chiudere il marker o reimpostare il nuovo punto di inizio
-				IsStartMarkerEnable = true;
-				IsEndMarkerEnable = true;
-				IsStartSubMarkerEnable = false;
-				IsEndSubMarkerEnable = false;
-			}
+		#region BUTTON CHECKS
 
-			if (FirstMarkerInCurrentPosition.StartPosition >= 0 && FirstMarkerInCurrentPosition.EndPosition > 0)
-			{// posso chiudere il marker o reimpostare il nuovo punto di inizio
-			 //e solo se sono a 50 dal primo marker posso creare un nuovo marker al suo interno
-				IsStartMarkerEnable = exististSecondMarker is null ? true : false;
-				IsEndMarkerEnable = exististSecondMarker is null ? true : false;
-				IsStartSubMarkerEnable = false;
-				IsEndSubMarkerEnable = false;
 
-				if (FirstMarkerInCurrentPosition.SubMarker is null || exististSecondMarker?.SubMarker is null)
-				{// posso chiudere il marker o reimpostare il nuovo punto di inizio
-				 //e solo se sono a 50 dal primo marker posso creare un nuovo marker al suo interno
-
-					IsStartSubMarkerEnable = true;
-					IsEndSubMarkerEnable = true;
-				}
-			}
+		public void EvalutePossibleAction()
+		{
+			IsStartSubMarkerEnable = true;
+			IsEndSubMarkerEnable = true;
+			IsStartMarkerEnable = true;
+			IsEndMarkerEnable = true;
 			StateHasChanged();
 
-
-
-
-
 		}
+
+
+
+
+
+
+		#endregion
 
 		public void Dispose()
 		{
