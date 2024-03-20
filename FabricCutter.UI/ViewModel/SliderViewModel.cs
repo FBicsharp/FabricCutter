@@ -12,7 +12,7 @@ namespace FabricCutter.UI.Logic
 				
 		public int PointerPosition { get; set; }
 		public int SliderLenght { get; set; }
-		public List<IMarkerBase> Markers { get; set; }
+		public List<Marker> Markers { get; set; }
 		public Action StateHasChanged { get; set; } = () => { };
 
 		public SliderViewModel(ApplicationSettings applicationSettings,
@@ -49,7 +49,7 @@ namespace FabricCutter.UI.Logic
 			var message = EventArgsAdapter.GetEventArgs<MarkerAddedEventArgs>(applicationEvents, value);
 			if (message is not null)
 			{
-				Markers = message.markersList.AsEnumerable<IMarkerBase>().ToList();
+				Markers = message.markersList;
 				StateHasChanged();
 			}
 		}
@@ -58,7 +58,7 @@ namespace FabricCutter.UI.Logic
 			var message = EventArgsAdapter.GetEventArgs<MarkerUpdatedEventArgs>(applicationEvents, value);
 			if (message is not null)
 			{
-				Markers = message.markersList.AsEnumerable<IMarkerBase>().ToList();
+				Markers = message.markersList;
 				StateHasChanged();
 			}
 		}

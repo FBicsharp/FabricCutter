@@ -1,8 +1,13 @@
-﻿namespace FabricCutter.UI.Logic
+﻿using Newtonsoft.Json;
+
+namespace FabricCutter.UI.Logic
 {
 	public class Marker : MarkerBase, IMarkerBase
 	{
-		public SubMarker? SubMarker { get;  set; }
+		[JsonProperty("Index")]
+		public override int Id { get => base.Id; set => base.Id = value; }
+		[JsonProperty("Splices")]
+		public List<SubMarker>? SubMarker { get;  set; }
 		
 
 		public Marker(int id, int startPosition, int endPosition) 

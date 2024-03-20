@@ -23,7 +23,10 @@
 
  @if (Marker.SubMarker is not null)
 {
-	<SubMarkersComponent SubMarker=@Marker.SubMarker ></SubMarkersComponent>	
+	@foreach (var submarker in @Marker.SubMarker)
+	{
+		<SubMarkersComponent SubMarker=@submarker></SubMarkersComponent>
+	}
 }
 
 

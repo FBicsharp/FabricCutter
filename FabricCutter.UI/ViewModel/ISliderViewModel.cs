@@ -5,7 +5,7 @@ namespace FabricCutter.UI.ViewModel
 {
     public interface ISliderViewModel : IViewModel
 	{
-		List<IMarkerBase> Markers { get; set; }
+		List<Marker> Markers { get; set; }
 		int PointerPosition { get; set; }
 		int SliderLenght { get; set; }
 

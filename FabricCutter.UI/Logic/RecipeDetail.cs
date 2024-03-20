@@ -9,22 +9,7 @@ namespace FabricCutter.UI.Logic
 	/// </summary>
 	public class RecipeDetail
 	{
-
-		public string Name { get;  set; }
-		public DateTime CreationDate { get;  set; }
-
-		public int TotalLenght { get;  set; }
-		public int MarkersLenght { get;  set; }
-		public int SplicesNumber { get;  set; }
-		public int MarkersNumber { get;  set; }
-		public int AbsolutePosition { get;  set; }
-
 		public List<Marker> Markers { get;  set; }
-
-	
-
-	
-
 
 	}
 }

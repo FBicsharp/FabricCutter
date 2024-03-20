@@ -2,11 +2,11 @@
 {
 	public interface IMarkerFactory
 	{
-		MarkerBase Build();
+		Marker BuildMarker();
 		void Clear();
-		Marker WithStartMarkerPosition(int newMarkerId, int startPosition);
-		Marker WithStartSubMarkerPosition(int startPosition);
-		Marker WithStopMarkerPosition(int endPosition);
-		Marker WithStopSubMarkerPosition(int endPosition);
+		void WithStartMarkerPosition(int newMarkerId, int startPosition);
+		void WithStartSubMarkerPosition( int startPosition);
+		void WithStopMarkerPosition(int endPosition);
+		void WithStopSubMarkerPosition(int endPosition);
 	}
 }
