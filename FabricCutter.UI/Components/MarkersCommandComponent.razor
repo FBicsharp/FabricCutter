@@ -1,24 +1,64 @@
-﻿
+﻿@using FabricCutter.UI.Logic
+@inject IMarkersCommandViewModel _viewModel
+
 <div class="length-component">
 	<div class="row">
-		<button></button>
-		<div class="label">AC</div>		
+		@if (_viewModel.IsStartMarkerEnable)
+		{
+			<button type="button" class="marker-button marker-button-marker oi oi-expand-left" @onclick=@_viewModel.StartMarker></button>
+			
+		}
+		else
+		{
+			<button type="button" class="marker-button oi oi-expand-left" disabled></button>
+		}
+		
+		<div class="label">Start Marker</div>		
 	</div>
 	<div class="row">
-		<button></button>
-		<div class="label">AS</div>
+		@if (_viewModel.IsStartSubMarkerEnable)
+		{
+			<button type="button" class="marker-button marker-button-submarker oi oi-collapse-right" @onclick=@_viewModel.StartSubMarker></button>
+		}
+		else
+		{
+			<button type="button" class="marker-button  oi oi-collapse-right" disabled></button>
+		}
+		
+		<div class="label">Start Sub Marker</div>
 	</div>
-	<div class="row">
-		<button></button>
-		<div class="label">LS</div>
+	<div class="row">			
+		@if (_viewModel.IsEndSubMarkerEnable)
+		{
+			<button type="button" class="marker-button marker-button-submarker oi oi-collapse-left" @onclick=@_viewModel.EndSubMarker></button>
+		}
+		else
+		{
+			<button type="button" class="marker-button oi oi-collapse-left" disabled></button>
+		}
+		<div class="label">End Sub Marker</div>
 	</div>
-	<div class="row">
-		<button></button>
-		<div class="label">LD</div>
+	<div class="row">		
+		@if (_viewModel.IsEndMarkerEnable)
+		{
+			<button type="button" class="marker-button marker-button-marker oi oi-expand-right" @onclick=@_viewModel.EndMarker></button>
+		}
+		else
+		{
+			<button type="button" class="marker-button oi oi-expand-right" disabled></button>
+		}
+		<div class="label">End Marker</div>
 	</div>
 </div>
 
 
 @code {
+
+	protected override void OnInitialized()
+	{
+		_viewModel.StateHasChanged  = StateHasChanged;
+	}
+
+	
 
 }

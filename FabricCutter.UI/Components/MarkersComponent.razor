@@ -1,43 +1,78 @@
-﻿
+﻿@using FabricCutter.UI.Logic
+@using FabricCutter.UI.Service
+@inject ApplicationSettings _settings
 
-<div class="marker-start" style=@start>
+@if (Marker.StartPosition >= 0 && Marker.EndPosition <= 0)//mosta solo mentre lo crea
+{
+	<div class="marker-delimitator marker-start" style=@startDelimitatorStyle>
+	</div>
+}
+@if (Marker.StartPosition >= 0 && Marker.EndPosition >= 0)
+{
+	<div class="marker-content" style=@contentStyle>
+	</div>	
+}
+@if (Marker.EndPosition > 0 && false)
+{
+	<div class="marker-delimitator marker-end" style=@endDelimitatorStyle>
+	</div>
+}
+<div class="marker-descriptor" style=@descriptorStyle>
+	@String.Format("M{0}", Marker.Id)
 </div>
-<div class="marker" style=@idx>
-	ciccio
-</div>
-<div class="marker-end" style=@end>
-</div>
+
+ @if (Marker.SubMarker is not null)
+{
+	@foreach (var submarker in @Marker.SubMarker)
+	{
+		<SubMarkersComponent SubMarker=@submarker></SubMarkersComponent>
+	}
+}
+
 
 
 @code {
+
 	[Parameter]
-	public string idx{ get; set; } 
-	[Parameter]
-	public string start { get; set; }
-	[Parameter]
-	public string end { get; set; }
+	public Marker Marker { get; set; }
+
+
+	public string contentStyle { get; set; }
+	public string startDelimitatorStyle { get; set; }
+	public string endDelimitatorStyle { get; set; }
+	public string descriptorStyle { get; set; }
+
+
+	protected override Task OnParametersSetAsync()
+	{		
+
+		int maxMargin = -15; // Massimo margine
+		int minMargin = 10; // Minimo margine		
+		int calculatedMargin = (int)(((Marker.StartPosition / (double)_settings.SliderLenght) * (maxMargin - minMargin)) + minMargin);
+
+		//$"margin-left: {calculatedMargin}px;";
+
+		
+		startDelimitatorStyle = $"z-index:{100 + Marker.Id}; "+
+								$"left: calc(({Marker.StartPosition } / {_settings.SliderLenght }) * 100%); "+
+								$"margin-left: {calculatedMargin}px;";
+
+
+		contentStyle =	$" z-index:{101 + Marker.Id};  " +
+						$" left: calc(({Marker.StartPosition} / {_settings.SliderLenght}) * 100%);  " +
+						$" width: calc(({Marker.MarkerLenght} / {_settings.SliderLenght}) * 100%);  " +
+						$" margin-left: {calculatedMargin}px;";
+
+		endDelimitatorStyle = $"z-index:{100 + Marker.Id}; left: calc(({Marker.EndPosition} / {_settings.SliderLenght}) * 100%); ";
+
+		descriptorStyle = $" z-index:{100 + Marker.Id}; " +
+						$" left: calc(({Marker.StartPosition} / {_settings.SliderLenght}) * 100%); " +
+						$" margin-left: {calculatedMargin-20}px;";
+
+
+		StateHasChanged();
+		return base.OnParametersSetAsync();
+	}
+
 
 }
-
-<style>
-	.marker {
-		position: absolute;
-	}
-
-	.marker-start {
-		position: absolute;
-		width: 20px;
-		height: 20px;
-		background-color: green;
-		transform: translateY(-21px);
-
-	}
-
-	.marker-end {
-		position: absolute;
-		width: 20px;
-		height: 20px;
-		background-color: red;
-		transform: translateY(25vh);
-	}
-</style> 

@@ -1,0 +1,45 @@
+﻿
+.recipe-command-marker-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    height: 5rem;
+    width: 5rem;
+    font-size: 3rem;
+    background-color: #F4538A;
+}
+
+
+
+
+.recipe-command-length-component {
+    padding: 10px;
+    margin-bottom: 20px;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.recipe-command-row {
+    display: inline-block;
+    align-items: center;
+    text-align: center;
+    margin: 10px;
+}
+
+.recipe-command-label {
+    width: 100px;
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
+    display: inline;
+    justify-content: center;
+    align-items: center;
+}
+
+

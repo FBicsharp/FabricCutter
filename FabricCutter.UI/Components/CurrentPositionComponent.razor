@@ -1,12 +1,24 @@
-﻿
+﻿@inject ICurrentPositionViewModel _viewModel
+
 <div class="row">
-	<div class="label">Current Position:</div>
-	<div class="value">@currentPosition</div>
+	<div class="label">CURRENT POSITION:</div>
+	<div class="value">@_viewModel.currentPosition</div>
 </div>
  
 
-@code {
-	[Parameter]
-	public int currentPosition { get; set; }
+@code {		
+
+	protected override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			_viewModel.StateHasChanged = StateHasChanged;
+		}
+		return base.OnAfterRenderAsync(firstRender);
+	}
+
+	
+
+
 
 }

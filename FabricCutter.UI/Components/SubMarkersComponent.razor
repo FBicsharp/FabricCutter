@@ -1,5 +1,55 @@
-﻿<h3>SubMarkersComponent</h3>
+﻿@using FabricCutter.UI.Logic
+@using FabricCutter.UI.Service
+@inject ApplicationSettings _settings
+
+@if (SubMarker.StartPosition >= 0 && SubMarker.EndPosition <= 0)//mosta solo mentre lo crea
+{
+	<div class="submarker-delimitator submarker-start" style=@startDelimitatorStyle>
+	</div>
+}
+@if (SubMarker.StartPosition >= 0 && SubMarker.EndPosition >= 0)
+{
+
+	<div class="submarker-content" style=@contentStyle>
+	</div>
+}
+<div class="submarker-descriptor" style=@descriptorStyle>
+	@("S")
+	@* @String.Format(, SubMarker?.Id) *@
+</div>
 
 @code {
 
+	[Parameter]
+	public SubMarker SubMarker { get; set; }
+
+	public string startDelimitatorStyle { get; set; }
+	public string contentStyle { get; set; }
+	public string descriptorStyle { get; set; }
+
+	protected override Task OnParametersSetAsync()
+	{
+		int maxMargin = -15; // Massimo margine
+		int minMargin = 10; // Minimo margine
+		int calculatedMargin = (int)(((SubMarker.StartPosition / (double)_settings.SliderLenght) * (maxMargin - minMargin)) + minMargin);
+
+		//$"margin-left: {calculatedMargin}px;";
+
+
+		startDelimitatorStyle = $" z-index:{1001 + SubMarker.Id}; " +
+								$" left: calc(({SubMarker.StartPosition} / {_settings.SliderLenght}) * 100%); " +
+								$" margin-left: {calculatedMargin}px;";
+
+		contentStyle =	$"z-index:{102 + SubMarker?.Id}; " +
+						$" left: calc(({SubMarker.StartPosition} / {_settings.SliderLenght}) * 100%);  " +
+						$" width: calc(({SubMarker.MarkerLenght} / {_settings.SliderLenght}) * 100%);  " +
+						$" margin-left: {calculatedMargin}px;";
+
+		descriptorStyle =	$"z-index:{100 + SubMarker?.Id}; " +
+							$" left: calc(({SubMarker.StartPosition} / {_settings.SliderLenght}) * 100%); " +
+							$" margin-left: {calculatedMargin-20}px;";
+		return base.OnParametersSetAsync();
+	}
+
 }
+

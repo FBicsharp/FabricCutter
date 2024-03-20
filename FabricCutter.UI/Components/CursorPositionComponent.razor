@@ -1,0 +1,20 @@
+﻿@using FabricCutter.UI.Logic
+@using FabricCutter.UI.Logic.Events
+@using FabricCutter.UI.Service
+@inject ICursorPositionViewModel _viewModel
+
+<div class=@_viewModel.CursorClassStyle  style=@_viewModel.CursorStyle >
+</div>
+
+
+
+
+@code {
+
+	protected override void OnInitialized()
+	{
+		_viewModel.StateHasChanged= StateHasChanged;
+		
+		base.OnInitialized();
+	}
+}

@@ -1,16 +1,22 @@
-﻿
+﻿@using FabricCutter.UI.Logic
+@using FabricCutter.UI.Logic.Events
+@using FabricCutter.UI.Service
+@inject ISliderViewModel _viewModel
 <div class="slider-container">
 
 	<div class="slider-content">
-	<div class="slider-header"></div>
-		<MarkersComponent end="z-index:106; right:500px; " start="z-index:106; right:700px; t " idx="z-index:106; right:600px;"></MarkersComponent>
-		<MarkersComponent end="z-index:101; right:550px; " start="z-index:101; right:750px; " idx="z-index:101; right:650px;"></MarkersComponent>
-		
-		<SubMarkersComponent></SubMarkersComponent>
-
+		<div class="slider-header"></div>
+		<CursorPositionComponent></CursorPositionComponent>
+		@if (_viewModel.Markers is not null)
+		{
+			@foreach (var marker in _viewModel.Markers)
+			{
+				<MarkersComponent Marker=@(marker as Marker)></MarkersComponent>
+			}
+		}
 	</div>
-
-	
+	<input type="range" class="slider-range" min="0" max=@_viewModel.SliderLenght value=@_viewModel.PointerPosition @oninput=@_viewModel.OnPositionPointerChange />
+	@* @onchange=@_viewModel.OnPositionPointerChange *@
 </div>
 
 
@@ -18,4 +24,10 @@
 
 @code {
 
+	protected override void OnInitialized()
+	{
+		_viewModel.StateHasChanged= StateHasChanged;
+		
+		base.OnInitialized();
+	}
 }

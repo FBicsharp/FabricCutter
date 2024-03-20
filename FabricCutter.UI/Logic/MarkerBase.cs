@@ -1,15 +1,23 @@
-﻿namespace FabricCutter.UI.Logic
+﻿using Newtonsoft.Json;
+
+
+namespace FabricCutter.UI.Logic
 {
-	public abstract class MarkerBase
+	public abstract class MarkerBase : IMarkerBase
 	{
 
-        
-        public virtual  int StartPosition { get;  set; }
-        public virtual  int EndPosition { get;  set; }
-        public virtual int MarkerLenght => (EndPosition - StartPosition);
+		[JsonIgnore]
+		public virtual int Id { get; set; }
+		[JsonProperty("Start")]
+		public virtual int StartPosition { get; set; }
+		[JsonProperty("Stop")]
+		public virtual int EndPosition { get; set; }
+		[JsonIgnore]
+		public virtual int MarkerLenght => (EndPosition -StartPosition);
 
-		public MarkerBase( int startPosition, int endPosition)
+		public MarkerBase(int markerId, int startPosition, int endPosition)
 		{
+			Id = markerId;
 			StartPosition = startPosition;
 			EndPosition = endPosition;
 		}

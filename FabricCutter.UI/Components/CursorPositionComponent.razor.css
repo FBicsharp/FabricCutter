@@ -1,0 +1,21 @@
+﻿
+.cursor-position-delimitator {
+    position: absolute;
+    width: 5px;
+    height: 30vh;
+    transform: translateY(-3vh);
+}
+
+.cursor-position-start {
+    background-color: #F4538A;
+    /*margin-left: 5px;*/
+}
+
+.cursor-position-end {
+    background-color: red;
+    /*margin-left: 5px;*/
+}
+.cursor-position-hidden {
+    visibility: hidden;
+}
+

@@ -1,17 +1,23 @@
-﻿
+﻿@inject IReciperCommandViewModel _viewModel
 
-<div class="length-component">
-	<div class="row">
-		<button></button>
-		<div class="label">CONFIRM</div>
+<div class="recipe-command-length-component">
+	<div class="recipe-command-row">
+		
+		<button type="button" class="recipe-command-marker-button oi oi-check" @onclick=@_viewModel.OnConfirm></button>
+		<div class="recipe-command-label">CONFIRM</div>
 	</div>
-	<div class="row">
-		<button></button>
-		<div class="label">RESET</div>
+	<div class="recipe-command-row">
+		<button type="button" class="recipe-command-marker-button oi oi-trash" @onclick=@_viewModel.OnReset></button>
+		<div class="recipe-command-label">RESET</div>
 	</div>
 </div>
 
 
 @code {
+	protected override void OnInitialized()
+	{
+		_viewModel.StateHasChanged = StateHasChanged;
+		base.OnInitialized();
+	}
 
 }

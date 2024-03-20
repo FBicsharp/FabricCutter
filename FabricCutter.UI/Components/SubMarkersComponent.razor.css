@@ -1,0 +1,27 @@
+﻿
+.submarker-content {
+    position: absolute;
+    background-color: rgb(250, 163, 0, 0.4);
+    border: 3px solid #FAA300;
+    height: 24.2vh;
+    margin-top: 1vh;
+    /* sfondo a linee barrate da in basso a sx fino in altro a dx */
+    background-image: linear-gradient(45deg, #FAA300 25%, transparent 25%, transparent 50%, #FAA300 50%, #FAA300 75%, transparent 75%, transparent);
+    background-size: 10px 10px;
+}
+.submarker-delimitator {
+    position: absolute;
+    width: 5px;
+    height: 30vh;
+    transform: translateY(-3vh);
+}
+
+.submarker-descriptor {
+    position: absolute;
+    font-weight: bold;
+    transform: translate(1vw,28vh);
+}
+
+.submarker-start {
+    background-color: coral;
+}

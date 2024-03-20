@@ -1,0 +1,78 @@
+﻿
+.marker-button {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    border-radius: 30%;
+    border: none; 
+    background-color: transparent; 
+    /*cursor: pointer;*/ 
+    height: 5rem;
+    width: 5rem;
+    font-size: 3rem;
+    
+}
+
+.marker-button-marker {
+    background-color: #59D5E0;
+}
+.marker-button-submarker {
+    background-color: #FAA300;
+}
+    
+.length-component-separator-up {
+    border-top: 5px solid gray;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.length-component-separator-down {
+    border-top: 5px solid gray;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.length-component {
+    padding: 10px;
+    margin-bottom: 20px;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+
+.label {
+    width: 100px;
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
+    display: inline;
+    justify-content: center;
+    align-items: center;
+}
+
+.value {
+    flex: 1;
+    text-align: center;
+    color: gray;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.position {
+    display: inline-block;
+    /* width: 50px; */
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid black;
+    margin-right: 10px;
+}
+
