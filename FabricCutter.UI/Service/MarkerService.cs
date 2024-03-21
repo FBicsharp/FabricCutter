@@ -53,6 +53,17 @@ namespace FabricCutter.UI.Service
 					}
 				});
 
+			_eventHub.Subscribe(ApplicationEvents.OnExportRecipe,
+				async (applicationEvents, value) =>
+				{
+					var message = EventArgsAdapter.GetEventArgs<MarkerExportEventArgs>(applicationEvents, value);
+					if (message is not null)
+					{
+						var args = new MarkerExportedEventArgs(await GetAllMarkersAsync());
+						_eventHub.Publish(ApplicationEvents.OnExportedRecipe, args);						
+					}
+				});
+
 
 		}
 

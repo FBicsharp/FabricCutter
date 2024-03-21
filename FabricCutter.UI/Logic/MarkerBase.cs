@@ -4,13 +4,11 @@
 namespace FabricCutter.UI.Logic
 {
 	public abstract class MarkerBase : IMarkerBase
-	{
-
-		[JsonIgnore]
+	{		
 		public virtual int Id { get; set; }
-		[JsonProperty("Start")]
+		[JsonProperty("Start", Order = 3)]
 		public virtual int StartPosition { get; set; }
-		[JsonProperty("Stop")]
+		[JsonProperty("Stop", Order = 4)]
 		public virtual int EndPosition { get; set; }
 		[JsonIgnore]
 		public virtual int MarkerLenght => (EndPosition -StartPosition);

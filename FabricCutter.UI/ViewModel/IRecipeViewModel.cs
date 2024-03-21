@@ -5,7 +5,7 @@ namespace FabricCutter.UI.ViewModel
 {
     public interface IRecipeViewModel : IViewModel
 	{	
-		IRecipe Recipe { get; }		
+		IRecipe _recipe { get; }		
 
 	}
 }

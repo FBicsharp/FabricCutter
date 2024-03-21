@@ -2,6 +2,6 @@
 {
 	public interface IRecipeDetailJsonFactory
 	{
-		string Create(List<IMarkerBase> markerList);
+		string Create(List<Marker> markerList);
 	}
 }
