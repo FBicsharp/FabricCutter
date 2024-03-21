@@ -56,19 +56,13 @@ namespace FabricCutter.UI.ViewModel
 
 		private void OnMarkerAddedHandler(ApplicationEvents applicationEvents, object value)
 		{
-			var markersList = EventArgsAdapter.GetEventArgs<MarkerAddedEventArgs>(applicationEvents, value)
-				.markersList
-				.AsEnumerable<IMarkerBase>()
-				.ToList();
+			var markersList = EventArgsAdapter.GetEventArgs<MarkerAddedEventArgs>(applicationEvents, value).markersList;
 			EvalutateMarkers(markersList);
 			StateHasChanged();
 		}
 		private void OnMarkerUpdatedHandler(ApplicationEvents applicationEvents, object value)
 		{
-			var markersList = EventArgsAdapter.GetEventArgs<MarkerUpdatedEventArgs>(applicationEvents, value)
-				.markersList
-				.AsEnumerable<IMarkerBase>()
-				.ToList(); ;
+			var markersList = EventArgsAdapter.GetEventArgs<MarkerUpdatedEventArgs>(applicationEvents, value).markersList;
 			EvalutateMarkers(markersList);
 			StateHasChanged();
 		}
@@ -93,21 +87,16 @@ namespace FabricCutter.UI.ViewModel
 		#endregion
 
 
-
-
-
-
-
-		public void EvalutateMarkers(List<IMarkerBase> markers)
+		public void EvalutateMarkers(List<Marker> markers)
 		{
 			markers= markers.Except(markers.Where(m => m.EndPosition < 0)).ToList();//excludo quelli ancora non definiti
 			var cnt = markers.Count();
 			var tmpLenght = cnt > 0 ? (markers.Max(m => m.StartPosition) - markers.Min(m => m.EndPosition)) : 0;
 			TotalLenght = tmpLenght < 0 ? 0 : tmpLenght;
 			MarkersLenght = cnt > 0 ? markers.Where(m=>m.EndPosition>=0).Sum(m => m.MarkerLenght) : 0;
-			SplicesNumber = markers.Where(c=> c is SubMarker).Count();
-			MarkersNumber = markers.Where(c => c is Marker).Count();			
-		}
+            SplicesNumber =markers.Where(m => m.SubMarker is not null).Select(m => m.SubMarker.Count()).Sum();
+			MarkersNumber = cnt;
+        }
 
 
 		public void Dispose()
