@@ -1,24 +1,16 @@
-﻿using FabricCutter.UI.Components;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 
 namespace FabricCutter.UI.Logic
 {
 
-	/// <summary>
-	/// Rappresenta le infiormazioni relative alla ricetta 
-	/// </summary>
-	public class RecipeDetailJsonFactory : IRecipeDetailJsonFactory
-	{
-		
-
-		public string Create(List<IMarkerBase> markerList)
-		{
-			
-			return JsonConvert.SerializeObject(markerList);
-
-		}
-
-
-	}
+    /// <summary>
+    /// Generate JSON representation of a recipe detail.
+    /// </summary>
+    public class RecipeDetailJsonFactory : IRecipeDetailJsonFactory
+    {
+        public string Create(List<Marker> markerList)
+        {
+            return JsonConvert.SerializeObject(markerList, Formatting.Indented);
+        }
+    }
 }
