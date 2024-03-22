@@ -23,7 +23,7 @@ namespace FabricCutter.UI.Logic
 			SubscribeEvents();
 			Markers = new();
 			SliderLenght = applicationSettings.SliderLenght;
-			PointerPosition = SliderLenght;
+			PointerPosition = 0;
 			SendPointerPositionChangeMesage();
 		}
 

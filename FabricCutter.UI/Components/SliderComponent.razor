@@ -15,7 +15,7 @@
 			}
 		}
 	</div>
-	<input type="range" class="slider-range" min="0" max=@_viewModel.SliderLenght value=@_viewModel.PointerPosition @oninput=@_viewModel.OnPositionPointerChange />
+	<input type="range" class="slider-range" min="0" max=@_viewModel.SliderLenght @bind-value=@_viewModel.PointerPosition @oninput=@_viewModel.OnPositionPointerChange />
 	@* @onchange=@_viewModel.OnPositionPointerChange *@
 </div>
 
@@ -28,6 +28,8 @@
 	{
 		_viewModel.StateHasChanged= StateHasChanged;
 		
+		
 		base.OnInitialized();
 	}
+
 }
