@@ -18,7 +18,7 @@
 }
 
 .slider-range {
-    direction: rtl;     
+    /*direction: rtl;*/     
     -webkit-appearance: none;
     -webkit-transition: .2s;
     width: 100%;
