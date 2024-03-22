@@ -1,6 +1,6 @@
 ﻿<!--[![Test Build](https://github.com/FBicsharp/BracketsGym/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/FBicsharp/BracketsGym/actions/workflows/main.yml) -->
 # FabricCutter.UI 
-
+![image](./AppImage.png)
 
 # HOW TO RUN 
 
