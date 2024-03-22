@@ -215,12 +215,6 @@ namespace FabricCutter.UI.ViewModel
             }
             return closestMarker;
         }
-
-
-
-
-
-
         private void CheckMarkerAction()
         {
             IsStartMarkerEnable = false;
@@ -302,9 +296,6 @@ namespace FabricCutter.UI.ViewModel
 
             #region START NEW MARKER
 
-            var MaxMarkerOverlapped = 2;
-            
-
             // trovo il marcatore con start e stop in cui la posizione corrente si trova
             var containerMarker = Markers
                 .Where(m=>m.Id  != MarkerInEditingMode?.Id
@@ -340,45 +331,97 @@ namespace FabricCutter.UI.ViewModel
             #endregion
 
         }
+
+
+
         private void CheckSubMarkerAction()
         {
             IsStartSubMarkerEnable = false;
             IsEndSubMarkerEnable = false;
 
             var isInEditing = MarkerInEditingMode is not null;
-            if (!isInEditing)
+            if (!isInEditing)//posso aggiungerli solo se sto editando un marker
                 return;
 
-            var hasSubMarkers = MarkerInEditingMode?.SubMarker is not null;
+            var hasSubMarkers = MarkerInEditingMode.SubMarker.Any();
             if (!hasSubMarkers)
-            {
-                var isMinimumDistanceRespectedWithCurrent = (PointerPosition > MarkerInEditingMode?.StartPosition + 50)
-                    && MarkerInEditingMode?.EndPosition == int.MinValue ?
-                                            (PointerPosition < MarkerInEditingMode.EndPosition) :
-                                            true;
-                if (!isMinimumDistanceRespectedWithCurrent)
-                    return;
+            {                
                 IsStartSubMarkerEnable = true;
                 return;
             }
 
-            var isClosed = MarkerInEditingMode.SubMarker.LastOrDefault()?.EndPosition != int.MinValue;
-            if (isClosed)//ho già chiuso il marker?
+
+            #region START CLOSE SUB MARKER
+            var isSubMarkerInEditing = MarkerInEditingMode.SubMarker.Any(s => s.StartPosition <= PointerPosition && s.EndPosition == int.MinValue);
+            if (isSubMarkerInEditing)
+            {
+                DebugFlowSubMarker.AppendLine("D2| sono in creazione sotto marcatore? SI");
+                var isOvelappedWithOtherSubMarker = MarkerInEditingMode.SubMarker.Count(m => m.Id != MarkerInEditingMode.Id
+                                             && PointerPosition > m.StartPosition
+                                             && PointerPosition <= m.EndPosition) > 0;
+                DebugFlowSubMarker.AppendLine($"D4| La fine è sovrapposta con  altri sotto marker? {(isOvelappedWithOtherSubMarker ? "SI" : "No")}");
+                if (isOvelappedWithOtherSubMarker)
+                {
+                    DebugFlowSubMarker.AppendLine($"\t A3| Start e stop disabilitati");
+                    return;
+                }
+
+                var isEndGreaterThanSubMarkerEnd = MarkerInEditingMode.SubMarker.Any() && MarkerInEditingMode.SubMarker.Max(s => s.EndPosition) <= PointerPosition;
+                DebugFlowSubMarker.AppendLine($"D6| La fine è maggiore dell'ultimo sotto marcatore? {(isEndGreaterThanSubMarkerEnd && MarkerInEditingMode.SubMarker.Any() ? "SI" : "No")}");
+                if (!isEndGreaterThanSubMarkerEnd && MarkerInEditingMode.SubMarker.Any())
+                {
+                    DebugFlowSubMarker.AppendLine($"\t A3| Start e stop disabilitati");
+                    return;
+                }
+
+                var isMinimumDistanceRespected = MarkerInEditingMode.SubMarker.Any() && MarkerInEditingMode.SubMarker.Count(m => m.Id != MarkerInEditingMode.Id
+                                                         && (m.StartPosition <= PointerPosition)) == 0;
+                DebugFlowSubMarker.AppendLine($"D7| la distanza tra inizio di altri marcatori è rispettata e lo stop è > di start? {(isMinimumDistanceRespected ? "SI" : "No")}");
+                if (isMinimumDistanceRespected
+                    && (PointerPosition > MarkerInEditingMode.StartPosition)
+                )
+                {
+                    DebugFlowSubMarker.AppendLine($"\t A7| Stop abilitati");
+                    IsEndSubMarkerEnable = true;
+                    return;
+                }
+            }
+            #endregion
+
+            #region START NEW SUB MARKER
+
+            // trovo il marcatore con start e stop in cui la posizione corrente si trova
+            var containerMarker = MarkerInEditingMode.SubMarker
+                .Where(m =>  m.StartPosition <= PointerPosition && m.EndPosition >= PointerPosition)
+                .OrderBy(i => i.StartPosition)
+                .FirstOrDefault();
+            DebugFlowSubMarker.AppendLine($"D8|{containerMarker?.Id}");
+            DebugFlowSubMarker.AppendLine($"D8|{containerMarker?.StartPosition}");
+
+            //controllo se questo containerMarker ha già altri marcatori che iniziano e finiscono tra start e stop
+            var isCurrentPositionInOtherMarker = MarkerInEditingMode.SubMarker
+                .Count(m => m.Id != MarkerInEditingMode?.Id && m.StartPosition >= containerMarker?.StartPosition) > 0;
+
+
+            DebugFlowSubMarker.AppendLine($"D8| la posizione corrente sitrova tra start e stop di altri marcatori ? {(isCurrentPositionInOtherMarker ? "SI" : "No")}");
+            if (isCurrentPositionInOtherMarker)
+            {
+                DebugFlowSubMarker.AppendLine($"\t A3| Start e stop disabilitati");
                 return;
-            //TODO
-            //var hasOverlappedWithOtherSubMarker = Markers.Count(m => 
-            //			m.SubMarker is not null 
-            //			&& m.SubMarker.Where(s=>s.EndPosition).EndPosition != int.MinValue //sono già chiusi
-            //			&& m.SubMarker.Id != MarkerInEditingMode.SubMarker.Id
-            //			&& PointerPosition >=m.SubMarker.StartPosition 
-            //			&& PointerPosition <=m.SubMarker.EndPosition ) > 0;
-            //var isMinimumDistanceRespected = Markers.Count(m => m.Id != MarkerInEditingMode.Id
-            //										&& m.StartPosition <= PointerPosition
-            //										&& m.EndPosition >= PointerPosition
-            //										&& Math.Abs(m.StartPosition - PointerPosition) < 50) == 0;
-            //if ((hasOverlappedWithOtherSubMarker && !isMinimumDistanceRespected) || !isMinimumDistanceRespected)
-            //	return;
-            IsEndSubMarkerEnable = true;
+            }
+
+            var isMinimumDistanceRespectedForStart = (PointerPosition - MarkerInEditingMode.SubMarker.Max(i=>i.StartPosition)) > 0;
+
+            DebugFlowSubMarker.AppendLine($"D9| la distanza tra inizio di altri marcatori è rispettata? {(isMinimumDistanceRespectedForStart ? "SI" : "No")}");
+            if (isMinimumDistanceRespectedForStart)
+            {
+                DebugFlowSubMarker.AppendLine($"\t A9| start abilitato");
+                IsStartSubMarkerEnable = true;
+                return;
+            }
+
+            #endregion
+            
 
         }
 
