@@ -310,13 +310,15 @@ namespace FabricCutter.UI.ViewModel
                 .Where(m=>m.Id  != MarkerInEditingMode?.Id
                     && m.StartPosition <= PointerPosition
                     && m.EndPosition >= PointerPosition
-                ).FirstOrDefault();
+                ).OrderBy(i=>i.Id).FirstOrDefault();
+            DebugFlowMarker.AppendLine($"D8|{containerMarker?.Id }");
+            DebugFlowMarker.AppendLine($"D8|{containerMarker?.StartPosition}");
 
             //controllo se questo containerMarker ha già altri marcatori che iniziano e finiscono tra start e stop
-            var isCurrentPositionInOtherMarker = Markers.Count(m => m.Id != containerMarker?.Id
-                                                            && m.StartPosition <= containerMarker?.StartPosition
-                                                            && m.EndPosition >= containerMarker?.StartPosition) > 0;
-
+            var isCurrentPositionInOtherMarker = Markers.Count(m => m.Id != containerMarker?.Id 
+                                                                 && m.Id != MarkerInEditingMode?.Id
+                                                            && m.StartPosition >= containerMarker?.StartPosition) > 0;
+            
 
             DebugFlowMarker.AppendLine($"D8| la posizione corrente sitrova tra start e stop di altri marcatori ? {(isCurrentPositionInOtherMarker ? "SI" : "No")}");
             if (isCurrentPositionInOtherMarker)
